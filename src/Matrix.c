@@ -138,10 +138,7 @@ Array_list_ptr get_column(Matrix_ptr matrix, int column) {
     Array_list_ptr vector;
     vector = create_array_list();
     for (int i = 0; i < matrix->row; i++){
-        double* x;
-        x = malloc(sizeof(double));
-        *x = matrix->values[i][column];
-        array_list_add(vector, x);
+        array_list_add_double(vector, matrix->values[i][column]);
     }
     return vector;
 }
