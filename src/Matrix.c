@@ -34,9 +34,9 @@ Matrix_ptr create_matrix(int row, int col) {
 Matrix_ptr create_matrix2(int row, int col, double min, double max) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, row, col);
-    for (int i = 0; i < row; i++){
-        for (int j = 0; j < col; j++){
-            result->values[i][j] = min + (double) random()/(double)(RAND_MAX/ (max - min));
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            result->values[i][j] = min + (double) random() / (double) (RAND_MAX / (max - min));
         }
     }
     return result;
@@ -51,7 +51,7 @@ Matrix_ptr create_matrix2(int row, int col, double min, double max) {
 Matrix_ptr create_matrix3(int size) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, size, size);
-    for (int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         result->values[i][i] = 1;
     }
     return result;
@@ -60,8 +60,8 @@ Matrix_ptr create_matrix3(int size) {
 Matrix_ptr create_matrix4(Vector_ptr vector1, Vector_ptr vector2) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, vector1->size, vector2->size);
-    for (int i = 0; i < result->row; i++){
-        for (int j = 0; j < result->col; j++){
+    for (int i = 0; i < result->row; i++) {
+        for (int j = 0; j < result->col; j++) {
             result->values[i][j] = get_value(vector1, i) * get_value(vector2, j);
         }
     }
@@ -71,8 +71,8 @@ Matrix_ptr create_matrix4(Vector_ptr vector1, Vector_ptr vector2) {
 Matrix_ptr clone(Matrix_ptr matrix) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, matrix->row, matrix->col);
-    for (int i = 0; i < matrix->row; i++){
-        for (int j = 0; j < matrix->col; j++){
+    for (int i = 0; i < matrix->row; i++) {
+        for (int j = 0; j < matrix->col; j++) {
             result->values[i][j] = matrix->values[i][j];
         }
     }
@@ -82,7 +82,7 @@ Matrix_ptr clone(Matrix_ptr matrix) {
 void allocate_matrix(Matrix_ptr matrix, int row, int col) {
     matrix->row = row;
     matrix->col = col;
-    matrix->values = malloc(matrix->row * sizeof(double*));
+    matrix->values = malloc(matrix->row * sizeof(double *));
     for (int i = 0; i < matrix->row; i++) {
         matrix->values[i] = calloc(matrix->col, sizeof(double));
     }
@@ -137,7 +137,7 @@ Vector_ptr get_row(Matrix_ptr matrix, int row) {
 Array_list_ptr get_column(Matrix_ptr matrix, int column) {
     Array_list_ptr vector;
     vector = create_array_list();
-    for (int i = 0; i < matrix->row; i++){
+    for (int i = 0; i < matrix->row; i++) {
         array_list_add_double(vector, matrix->values[i][column]);
     }
     return vector;
@@ -167,7 +167,7 @@ void column_wise_normalize(Matrix_ptr matrix) {
 void multiply_with_constant(Matrix_ptr matrix, double constant) {
     int i;
     for (i = 0; i < matrix->row; i++) {
-        for (int j = 0; j < matrix->col; j++){
+        for (int j = 0; j < matrix->col; j++) {
             matrix->values[i][j] *= constant;
         }
     }
@@ -182,7 +182,7 @@ void multiply_with_constant(Matrix_ptr matrix, double constant) {
 void divide_by_constant(Matrix_ptr matrix, double constant) {
     int i;
     for (i = 0; i < matrix->row; i++) {
-        for (int j = 0; j < matrix->col; j++){
+        for (int j = 0; j < matrix->col; j++) {
             matrix->values[i][j] /= constant;
         }
     }
@@ -197,7 +197,7 @@ void divide_by_constant(Matrix_ptr matrix, double constant) {
  */
 void add_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
     for (int i = 0; i < matrix1->row; i++) {
-        for (int j = 0; j < matrix1->col; j++){
+        for (int j = 0; j < matrix1->col; j++) {
             matrix1->values[i][j] += matrix2->values[i][j];
         }
     }
@@ -212,7 +212,7 @@ void add_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
  * @param v     Vector type input.
  */
 void add_vector_to_matrix(Matrix_ptr matrix, int row, Vector_ptr v) {
-    for (int i = 0; i < matrix->col; i++){
+    for (int i = 0; i < matrix->col; i++) {
         matrix->values[row][i] += get_value(v, i);
     }
 }
@@ -226,7 +226,7 @@ void add_vector_to_matrix(Matrix_ptr matrix, int row, Vector_ptr v) {
  */
 void subtract_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
     for (int i = 0; i < matrix1->row; i++) {
-        for (int j = 0; j < matrix1->col; j++){
+        for (int j = 0; j < matrix1->col; j++) {
             matrix1->values[i][j] -= matrix2->values[i][j];
         }
     }
@@ -242,7 +242,7 @@ void subtract_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
  * @return Vector that holds the result.
  */
 Vector_ptr multiply_with_vector_from_left(Matrix_ptr matrix, Vector_ptr vector) {
-    double* result = malloc(matrix->col * sizeof(double));
+    double *result = malloc(matrix->col * sizeof(double));
     for (int i = 0; i < matrix->col; i++) {
         result[i] = 0.0;
         for (int j = 0; j < matrix->row; j++) {
@@ -262,10 +262,10 @@ Vector_ptr multiply_with_vector_from_left(Matrix_ptr matrix, Vector_ptr vector) 
  * @return Vector that holds the result.
  */
 Vector_ptr multiply_with_vector_from_right(Matrix_ptr matrix, Vector_ptr vector) {
-    double* result = malloc(matrix->row * sizeof(double));
+    double *result = malloc(matrix->row * sizeof(double));
     for (int i = 0; i < matrix->row; i++) {
         result[i] = 0;
-        for (int j = 0; j < matrix->col; j++){
+        for (int j = 0; j < matrix->col; j++) {
             result[i] += matrix->values[i][j] * get_value(vector, j);
         }
     }
@@ -294,7 +294,7 @@ double column_sum(Matrix_ptr matrix, int columnNo) {
  * @return Vector that holds column sum.
  */
 Vector_ptr sum_of_rows(Matrix_ptr matrix) {
-    double* result = malloc(matrix->col * sizeof(double));
+    double *result = malloc(matrix->col * sizeof(double));
     for (int i = 0; i < matrix->col; i++) {
         result[i] = column_sum(matrix, i);
     }
@@ -310,7 +310,7 @@ Vector_ptr sum_of_rows(Matrix_ptr matrix) {
  */
 double row_sum(Matrix_ptr matrix, int row) {
     double sum = 0;
-    for (int i = 0; i < matrix->col; i++){
+    for (int i = 0; i < matrix->col; i++) {
         sum += matrix->values[matrix->row][i];
     }
     return sum;
@@ -353,7 +353,7 @@ Matrix_ptr element_product_with_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
-        for (int j = 0; j < matrix2->col; j++){
+        for (int j = 0; j < matrix2->col; j++) {
             result->values[i][j] = matrix1->values[i][j] * matrix2->values[i][j];
         }
     }
@@ -369,7 +369,7 @@ Matrix_ptr element_product_with_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
 double sum_of_elements_of_matrix(Matrix_ptr matrix) {
     double sum = 0.0;
     for (int i = 0; i < matrix->row; i++) {
-        for (int j = 0; j < matrix->col; j++){
+        for (int j = 0; j < matrix->col; j++) {
             sum += matrix->values[i][j];
         }
     }
@@ -475,18 +475,18 @@ void inverse(Matrix_ptr matrix) {
     double dum, pivinv;
     int i, icol, irow, k, l, ll;
     Matrix_ptr b = create_matrix3(matrix->row);
-    int* indxc, *indxr, *ipiv;
-    indxc = calloc(matrix->row, sizeof (int));
-    indxr = calloc(matrix->row, sizeof (int));
-    ipiv = calloc(matrix->row, sizeof (int));
+    int *indxc, *indxr, *ipiv;
+    indxc = calloc(matrix->row, sizeof(int));
+    indxr = calloc(matrix->row, sizeof(int));
+    ipiv = calloc(matrix->row, sizeof(int));
     for (i = 1; i <= matrix->row; i++) {
         big = 0.0;
         irow = -1;
         icol = -1;
-        for (int j = 1; j <= matrix->row; j++){
-            if (ipiv[j - 1] != 1){
-                for (k = 1; k <= matrix->row; k++){
-                    if (ipiv[k - 1] == 0){
+        for (int j = 1; j <= matrix->row; j++) {
+            if (ipiv[j - 1] != 1) {
+                for (k = 1; k <= matrix->row; k++) {
+                    if (ipiv[k - 1] == 0) {
                         if (fabs(matrix->values[j - 1][k - 1]) >= big) {
                             big = fabs(matrix->values[j - 1][k - 1]);
                             irow = j;
@@ -498,7 +498,7 @@ void inverse(Matrix_ptr matrix) {
         }
         ipiv[icol - 1] = ipiv[icol - 1] + 1;
         if (irow != icol) {
-            double* dummy = malloc(matrix->col * sizeof(double));
+            double *dummy = malloc(matrix->col * sizeof(double));
             memcpy(dummy, matrix->values[irow - 1], matrix->col * sizeof(double));
             memcpy(matrix->values[irow - 1], matrix->values[icol - 1], matrix->col * sizeof(double));
             memcpy(matrix->values[icol - 1], dummy, matrix->col * sizeof(double));
@@ -511,7 +511,7 @@ void inverse(Matrix_ptr matrix) {
         indxc[i - 1] = icol;
         pivinv = (1.0) / (matrix->values[icol - 1][icol - 1]);
         matrix->values[icol - 1][icol - 1] = 1.0;
-        for (int j = 0; j < matrix->col; j++){
+        for (int j = 0; j < matrix->col; j++) {
             matrix->values[icol - 1][j] *= pivinv;
             b->values[icol - 1][j] *= pivinv;
         }
@@ -525,8 +525,8 @@ void inverse(Matrix_ptr matrix) {
                     b->values[ll - 1][l - 1] -= b->values[icol - 1][l - 1] * dum;
             }
     }
-    for (l = matrix->row; l >= 1; l--){
-        if (indxr[l - 1] != indxc[l - 1]){
+    for (l = matrix->row; l >= 1; l--) {
+        if (indxr[l - 1] != indxc[l - 1]) {
             for (k = 1; k <= matrix->row; k++) {
                 double tmp = matrix->values[k - 1][indxr[l - 1] - 1];
                 matrix->values[k - 1][indxr[l - 1] - 1] = matrix->values[k - 1][indxc[l - 1] - 1];
@@ -594,9 +594,9 @@ Array_list_ptr characteristics(Matrix_ptr matrix) {
     Matrix_ptr matrix1 = clone(matrix);
     Matrix_ptr v;
     v = create_matrix3(matrix->row);
-    double* d = malloc(matrix->row * sizeof(double));
-    double* b = malloc(matrix->row * sizeof(double));
-    double* z = malloc(matrix->row * sizeof(double));
+    double *d = malloc(matrix->row * sizeof(double));
+    double *b = malloc(matrix->row * sizeof(double));
+    double *z = malloc(matrix->row * sizeof(double));
     double EPS = 0.000000000000000001;
     for (ip = 0; ip < matrix->row; ip++) {
         b[ip] = d[ip] = matrix1->values[ip][ip];
@@ -679,7 +679,7 @@ Array_list_ptr characteristics(Matrix_ptr matrix) {
 Matrix_ptr sum_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
     Matrix_ptr result = create_matrix(matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
-        for (int j = 0; j < matrix1->col; j++){
+        for (int j = 0; j < matrix1->col; j++) {
             result->values[i][j] = matrix1->values[i][j] + matrix2->values[i][j];
         }
     }
@@ -689,7 +689,7 @@ Matrix_ptr sum_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
 Matrix_ptr difference_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
     Matrix_ptr result = create_matrix(matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
-        for (int j = 0; j < matrix1->col; j++){
+        for (int j = 0; j < matrix1->col; j++) {
             result->values[i][j] = matrix1->values[i][j] - matrix2->values[i][j];
         }
     }

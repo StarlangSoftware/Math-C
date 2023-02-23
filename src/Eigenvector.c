@@ -17,11 +17,11 @@ void free_eigenvector(Eigenvector_ptr eigenvector) {
     free(eigenvector);
 }
 
-int compare_eigenvector(Eigenvector_ptr first, Eigenvector_ptr second){
-    if (first->eigenvalue < second->eigenvalue){
+int compare_eigenvector(Eigenvector_ptr first, Eigenvector_ptr second) {
+    if (first->eigenvalue < second->eigenvalue) {
         return -1;
     } else {
-        if (first->eigenvalue > second->eigenvalue){
+        if (first->eigenvalue > second->eigenvalue) {
             return 1;
         } else {
             return 0;

@@ -35,7 +35,7 @@ Vector_ptr create_vector2(int size, double x) {
     Vector_ptr result = malloc(sizeof(Vector));
     result->size = size;
     result->values = create_array_list();
-    for (int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         array_list_add_double(result->values, x);
     }
     return result;
@@ -54,8 +54,8 @@ Vector_ptr create_vector3(int size, int index, double x) {
     Vector_ptr result = malloc(sizeof(Vector));
     result->size = size;
     result->values = create_array_list();
-    for (int i = 0; i < size; i++){
-        if (i == index){
+    for (int i = 0; i < size; i++) {
+        if (i == index) {
             array_list_add_double(result->values, x);
         } else {
             array_list_add_double(result->values, 0);
@@ -75,7 +75,7 @@ Vector_ptr create_vector4(double *values, int size) {
     Vector_ptr result = malloc(sizeof(Vector));
     result->size = size;
     result->values = create_array_list();
-    for (int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         array_list_add(result->values, &(values[i]));
     }
     return result;
@@ -91,7 +91,7 @@ Vector_ptr biased(Vector_ptr vector) {
     Vector_ptr result = malloc(sizeof(Vector));
     result->values = create_array_list();
     array_list_add_double(result->values, 1);
-    for (int i = 0; i < vector->size; i++){
+    for (int i = 0; i < vector->size; i++) {
         array_list_add_double(result->values, array_list_get_double(result->values, i));
     }
     result->size = vector->size + 1;
@@ -115,7 +115,7 @@ void add_value_to_vector(Vector_ptr vector, double x) {
  * @param x   input to insert to given index of values {@link vector}.
  */
 void insert_into_pos(Vector_ptr vector, int pos, double x) {
-    double* value;
+    double *value;
     value = malloc(sizeof(double));
     *value = x;
     array_list_insert(vector->values, pos, value);
@@ -135,9 +135,9 @@ void remove_at_pos(Vector_ptr vector, int pos) {
 /**
  * The clear method sets all the elements of values {@link vector} to 0.0.
  */
-void clear_vector(Vector_ptr vector){
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
+void clear_vector(Vector_ptr vector) {
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
         *value = 0;
     }
 }
@@ -147,9 +147,9 @@ void clear_vector(Vector_ptr vector){
  *
  * @return Sum of all elements in the vector.
  */
-double sum_of_elements_of_vector(Vector_ptr vector){
+double sum_of_elements_of_vector(Vector_ptr vector) {
     double total = 0;
-    for (int i = 0; i < vector->size; i++){
+    for (int i = 0; i < vector->size; i++) {
         total += array_list_get_double(vector->values, i);
     }
     return total;
@@ -165,9 +165,9 @@ double sum_of_elements_of_vector(Vector_ptr vector){
 int max_index_of_vector(Vector_ptr vector) {
     int index = 0;
     double max = array_list_get_double(vector->values, 0);
-    for (int i = 1; i < vector->size; i++){
+    for (int i = 1; i < vector->size; i++) {
         double value = array_list_get_double(vector->values, i);
-        if (value > max){
+        if (value > max) {
             max = value;
             index = i;
         }
@@ -180,8 +180,8 @@ int max_index_of_vector(Vector_ptr vector) {
  * 1 / (1 + exp(-values.get(i))), i ranges from 0 to size.
  */
 void sigmoid_of_vector(Vector_ptr vector) {
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
         *value = 1 / (1 + exp(*value));
     }
 }
@@ -190,8 +190,8 @@ void sigmoid_of_vector(Vector_ptr vector) {
  * The tanh method loops through the values {@link ArrayList} and sets each ith item with tanh function.
  */
 void tanh_of_vector(Vector_ptr vector) {
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
         *value = tanh(*value);
     }
 }
@@ -200,9 +200,9 @@ void tanh_of_vector(Vector_ptr vector) {
  * The relu method loops through the values {@link ArrayList} and sets each ith item with relu function.
  */
 void relu_of_vector(Vector_ptr vector) {
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
-        if (*value < 0){
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
+        if (*value < 0) {
             *value = 0.0;
         }
     }
@@ -213,9 +213,9 @@ void relu_of_vector(Vector_ptr vector) {
  * relu function.
  */
 void relu_derivative_of_vector(Vector_ptr vector) {
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
-        if (*value > 0){
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
+        if (*value > 0) {
             *value = 1.0;
         } else {
             *value = 0.0;
@@ -235,7 +235,7 @@ Vector_ptr skip_vector(Vector_ptr vector, int mod, int value) {
     Vector_ptr result = malloc(sizeof(Vector));
     result->values = create_array_list();
     int i = value;
-    while (i < vector->size){
+    while (i < vector->size) {
         array_list_add_double(result->values, array_list_get_double(vector->values, i));
         i += mod;
     }
@@ -250,8 +250,8 @@ Vector_ptr skip_vector(Vector_ptr vector, int mod, int value) {
  * @param v Vector to add.
  */
 void add_vector(Vector_ptr vector, Vector_ptr added) {
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
         *value += array_list_get_double(added->values, i);
     }
 }
@@ -264,8 +264,8 @@ void add_vector(Vector_ptr vector, Vector_ptr added) {
  * @param v Vector to subtract from values {@link vector}.
  */
 void subtract_vector(Vector_ptr vector, Vector_ptr subtracted) {
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
         *value -= array_list_get_double(subtracted->values, i);
     }
 }
@@ -279,10 +279,10 @@ void subtract_vector(Vector_ptr vector, Vector_ptr subtracted) {
  * @return new {@link Vector} with result {@link array}.
  */
 Vector_ptr vector_difference(Vector_ptr vector, Vector_ptr subtracted) {
-    double* values = malloc(vector->size * sizeof(double));
-    for (int i = 0; i < vector->size; i++){
+    double *values = malloc(vector->size * sizeof(double));
+    for (int i = 0; i < vector->size; i++) {
         values[i] = array_list_get_double(vector->values, i) -
-                array_list_get_double(subtracted->values, i);
+                    array_list_get_double(subtracted->values, i);
     }
     return create_vector4(values, vector->size);
 }
@@ -295,9 +295,9 @@ Vector_ptr vector_difference(Vector_ptr vector, Vector_ptr subtracted) {
  */
 double dot_product(Vector_ptr vector1, Vector_ptr vector2) {
     double result = 0.0;
-    for (int i = 0; i < vector1->size; i++){
+    for (int i = 0; i < vector1->size; i++) {
         result += array_list_get_double(vector1->values, i) *
-                    array_list_get_double(vector2->values, i);
+                  array_list_get_double(vector2->values, i);
     }
     return result;
 }
@@ -310,7 +310,7 @@ double dot_product(Vector_ptr vector1, Vector_ptr vector2) {
  */
 double dot_product_with_itself(Vector_ptr vector) {
     double result = 0.0;
-    for (int i = 0; i < vector->size; i++){
+    for (int i = 0; i < vector->size; i++) {
         result += array_list_get_double(vector->values, i) *
                   array_list_get_double(vector->values, i);
     }
@@ -326,8 +326,8 @@ double dot_product_with_itself(Vector_ptr vector) {
  * @return Vector with result {@link array}.
  */
 Vector_ptr element_product_with_vector(Vector_ptr vector1, Vector_ptr vector2) {
-    double* values = malloc(vector1->size * sizeof(double));
-    for (int i = 0; i < vector1->size; i++){
+    double *values = malloc(vector1->size * sizeof(double));
+    for (int i = 0; i < vector1->size; i++) {
         values[i] = array_list_get_double(vector1->values, i) *
                     array_list_get_double(vector2->values, i);
     }
@@ -340,8 +340,8 @@ Vector_ptr element_product_with_vector(Vector_ptr vector1, Vector_ptr vector2) {
  * @param value is used to divide items of values {@link vector}.
  */
 void divide_to_value(Vector_ptr vector, double x) {
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
         *value /= x;
     }
 }
@@ -352,8 +352,8 @@ void divide_to_value(Vector_ptr vector, double x) {
  * @param value is used to multiply items of values {@link vector}.
  */
 void multiply_with_value(Vector_ptr vector, double x) {
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
         *value *= x;
     }
 }
@@ -368,7 +368,7 @@ void multiply_with_value(Vector_ptr vector, double x) {
 Vector_ptr product_with_value(Vector_ptr vector, double x) {
     Vector_ptr result = malloc(sizeof(Vector));
     result->values = create_array_list();
-    for (int i = 0; i < vector->size; i++){
+    for (int i = 0; i < vector->size; i++) {
         array_list_add_double(result->values, x * array_list_get_double(vector->values, i));
     }
     return result;
@@ -380,11 +380,11 @@ Vector_ptr product_with_value(Vector_ptr vector, double x) {
  */
 void l1_normalize(Vector_ptr vector) {
     double total = 0;
-    for (int i = 0; i < vector->size; i++){
+    for (int i = 0; i < vector->size; i++) {
         total += array_list_get_double(vector->values, i);
     }
-    for (int i = 0; i < vector->size; i++){
-        double* value = array_list_get(vector->values, i);
+    for (int i = 0; i < vector->size; i++) {
+        double *value = array_list_get(vector->values, i);
         *value /= total;
     }
 }
@@ -397,7 +397,7 @@ void l1_normalize(Vector_ptr vector) {
  */
 double l2_norm(Vector_ptr vector) {
     double total = 0;
-    for (int i = 0; i < vector->size; i++){
+    for (int i = 0; i < vector->size; i++) {
         double value = array_list_get_double(vector->values, i);
         total += value * value;
     }
@@ -432,7 +432,7 @@ double get_value(Vector_ptr vector, int index) {
  * @param value is used to set the given index
  */
 void set_value(Vector_ptr vector, int index, double x) {
-    double* value = array_list_get(vector->values, index);
+    double *value = array_list_get(vector->values, index);
     *value = x;
 }
 
@@ -443,7 +443,7 @@ void set_value(Vector_ptr vector, int index, double x) {
  * @param value value to add to given index.
  */
 void add_value(Vector_ptr vector, int index, double x) {
-    double* value = array_list_get(vector->values, index);
+    double *value = array_list_get(vector->values, index);
     *value += x;
 }
 
@@ -454,7 +454,7 @@ void add_value(Vector_ptr vector, int index, double x) {
  */
 double sum_of_vector(Vector_ptr vector) {
     double total = 0;
-    for (int i = 0; i < vector->size; i++){
+    for (int i = 0; i < vector->size; i++) {
         total += array_list_get_double(vector->values, i);
     }
     return total;
@@ -462,8 +462,8 @@ double sum_of_vector(Vector_ptr vector) {
 
 void swap_vector(Vector_ptr vector, int index1, int index2) {
     double tmp;
-    double* value1 = array_list_get(vector->values, index1);
-    double* value2 = array_list_get(vector->values, index2);
+    double *value1 = array_list_get(vector->values, index1);
+    double *value2 = array_list_get(vector->values, index2);
     tmp = *value1;
     *value1 = *value2;
     *value2 = tmp;
