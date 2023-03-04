@@ -432,15 +432,15 @@ Matrix_ptr partial(Matrix_ptr matrix, int rowstart, int rowend, int colstart, in
  *
  * @return true if items are equal, false otherwise.
  */
-int is_symmetric(Matrix_ptr matrix) {
+bool is_symmetric(Matrix_ptr matrix) {
     for (int i = 0; i < matrix->row - 1; i++) {
         for (int j = i + 1; j < matrix->row; j++) {
             if (matrix->values[i][j] != matrix->values[j][i]) {
-                return 0;
+                return false;
             }
         }
     }
-    return 1;
+    return true;
 }
 
 /**

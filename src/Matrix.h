@@ -72,7 +72,7 @@ Matrix_ptr transpose(Matrix_ptr matrix);
 
 Matrix_ptr partial(Matrix_ptr matrix, int rowstart, int rowend, int colstart, int colend);
 
-int is_symmetric(Matrix_ptr matrix);
+bool is_symmetric(Matrix_ptr matrix);
 
 double determinant(Matrix_ptr matrix);
 
