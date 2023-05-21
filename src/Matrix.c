@@ -57,7 +57,7 @@ Matrix_ptr create_matrix3(int size) {
     return result;
 }
 
-Matrix_ptr create_matrix4(Vector_ptr vector1, Vector_ptr vector2) {
+Matrix_ptr create_matrix4(const Vector* vector1, const Vector* vector2) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, vector1->size, vector2->size);
     for (int i = 0; i < result->row; i++) {
@@ -68,7 +68,7 @@ Matrix_ptr create_matrix4(Vector_ptr vector1, Vector_ptr vector2) {
     return result;
 }
 
-Matrix_ptr clone(Matrix_ptr matrix) {
+Matrix_ptr clone(const Matrix* matrix) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, matrix->row, matrix->col);
     for (int i = 0; i < matrix->row; i++) {
@@ -123,7 +123,7 @@ void increment(Matrix_ptr matrix, int rowNo, int colNo) {
  * @param _row integer input for row number.
  * @return Vector of values {@link array} at given row input.
  */
-Vector_ptr get_row(Matrix_ptr matrix, int row) {
+Vector_ptr get_row(const Matrix* matrix, int row) {
     return create_vector4(matrix->values[row], matrix->col);
 }
 
@@ -134,7 +134,7 @@ Vector_ptr get_row(Matrix_ptr matrix, int row) {
  * @param column integer input for column number.
  * @return Vector of given column number.
  */
-Array_list_ptr get_column(Matrix_ptr matrix, int column) {
+Array_list_ptr get_column(const Matrix* matrix, int column) {
     Array_list_ptr vector;
     vector = create_array_list();
     for (int i = 0; i < matrix->row; i++) {
@@ -195,7 +195,7 @@ void divide_by_constant(Matrix_ptr matrix, double constant) {
  *
  * @param m Matrix type input.
  */
-void add_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
+void add_matrix(Matrix_ptr matrix1, const Matrix* matrix2) {
     for (int i = 0; i < matrix1->row; i++) {
         for (int j = 0; j < matrix1->col; j++) {
             matrix1->values[i][j] += matrix2->values[i][j];
@@ -211,7 +211,7 @@ void add_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
  * @param rowNo integer input for row number.
  * @param v     Vector type input.
  */
-void add_vector_to_matrix(Matrix_ptr matrix, int row, Vector_ptr v) {
+void add_vector_to_matrix(Matrix_ptr matrix, int row, const Vector* v) {
     for (int i = 0; i < matrix->col; i++) {
         matrix->values[row][i] += get_value(v, i);
     }
@@ -224,7 +224,7 @@ void add_vector_to_matrix(Matrix_ptr matrix, int row, Vector_ptr v) {
  *
  * @param m Matrix type input.
  */
-void subtract_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
+void subtract_matrix(Matrix_ptr matrix1, const Matrix* matrix2) {
     for (int i = 0; i < matrix1->row; i++) {
         for (int j = 0; j < matrix1->col; j++) {
             matrix1->values[i][j] -= matrix2->values[i][j];
@@ -241,7 +241,7 @@ void subtract_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
  * @param v {@link Vector} type input.
  * @return Vector that holds the result.
  */
-Vector_ptr multiply_with_vector_from_left(Matrix_ptr matrix, Vector_ptr vector) {
+Vector_ptr multiply_with_vector_from_left(const Matrix* matrix, const Vector* vector) {
     double *result = malloc(matrix->col * sizeof(double));
     for (int i = 0; i < matrix->col; i++) {
         result[i] = 0.0;
@@ -261,7 +261,7 @@ Vector_ptr multiply_with_vector_from_left(Matrix_ptr matrix, Vector_ptr vector) 
  * @param v {@link Vector} type input.
  * @return Vector that holds the result.
  */
-Vector_ptr multiply_with_vector_from_right(Matrix_ptr matrix, Vector_ptr vector) {
+Vector_ptr multiply_with_vector_from_right(const Matrix* matrix, const Vector* vector) {
     double *result = malloc(matrix->row * sizeof(double));
     for (int i = 0; i < matrix->row; i++) {
         result[i] = 0;
@@ -279,7 +279,7 @@ Vector_ptr multiply_with_vector_from_right(Matrix_ptr matrix, Vector_ptr vector)
  * @param columnNo Column number input.
  * @return summation of given column of values {@link array}.
  */
-double column_sum(Matrix_ptr matrix, int columnNo) {
+double column_sum(const Matrix* matrix, int columnNo) {
     double sum = 0;
     for (int i = 0; i < matrix->row; i++) {
         sum += matrix->values[i][columnNo];
@@ -293,7 +293,7 @@ double column_sum(Matrix_ptr matrix, int columnNo) {
  *
  * @return Vector that holds column sum.
  */
-Vector_ptr sum_of_rows(Matrix_ptr matrix) {
+Vector_ptr sum_of_rows(const Matrix* matrix) {
     double *result = malloc(matrix->col * sizeof(double));
     for (int i = 0; i < matrix->col; i++) {
         result[i] = column_sum(matrix, i);
@@ -308,7 +308,7 @@ Vector_ptr sum_of_rows(Matrix_ptr matrix) {
  * @param rowNo Row number input.
  * @return summation of given row of values {@link array}.
  */
-double row_sum(Matrix_ptr matrix, int row) {
+double row_sum(const Matrix* matrix, int row) {
     double sum = 0;
     for (int i = 0; i < matrix->col; i++) {
         sum += matrix->values[matrix->row][i];
@@ -325,7 +325,7 @@ double row_sum(Matrix_ptr matrix, int row) {
  * @param m Matrix type input.
  * @return result {@link Matrix}.
  */
-Matrix_ptr multiply_with_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
+Matrix_ptr multiply_with_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     double sum;
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, matrix1->row, matrix2->col);
@@ -349,7 +349,7 @@ Matrix_ptr multiply_with_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
  * @param m Matrix type input.
  * @return result {@link Matrix}.
  */
-Matrix_ptr element_product_with_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
+Matrix_ptr element_product_with_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
@@ -366,7 +366,7 @@ Matrix_ptr element_product_with_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
  *
  * @return sum of the items of values {@link array}.
  */
-double sum_of_elements_of_matrix(Matrix_ptr matrix) {
+double sum_of_elements_of_matrix(const Matrix* matrix) {
     double sum = 0.0;
     for (int i = 0; i < matrix->row; i++) {
         for (int j = 0; j < matrix->col; j++) {
@@ -381,7 +381,7 @@ double sum_of_elements_of_matrix(Matrix_ptr matrix) {
  *
  * @return sum of items at diagonal.
  */
-double trace(Matrix_ptr matrix) {
+double trace(const Matrix* matrix) {
     double sum = 0.0;
     for (int i = 0; i < matrix->row; i++) {
         sum += matrix->values[i][i];
@@ -395,7 +395,7 @@ double trace(Matrix_ptr matrix) {
  *
  * @return Matrix type output.
  */
-Matrix_ptr transpose(Matrix_ptr matrix) {
+Matrix_ptr transpose(const Matrix* matrix) {
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, matrix->col, matrix->row);
     for (int i = 0; i < matrix->row; i++) {
@@ -417,9 +417,9 @@ Matrix_ptr transpose(Matrix_ptr matrix) {
  * @param colend   integer input for defining ending index of column.
  * @return result Matrix.
  */
-Matrix_ptr partial(Matrix_ptr matrix, int rowstart, int rowend, int colstart, int colend) {
+Matrix_ptr partial(const Matrix* matrix, int rowstart, int rowend, int colstart, int colend) {
     Matrix_ptr result = malloc(sizeof(Matrix));
-    allocate_matrix(matrix, rowend - rowstart + 1, colend - colstart + 1);
+    allocate_matrix(result, rowend - rowstart + 1, colend - colstart + 1);
     for (int i = rowstart; i <= rowend; i++)
         for (int j = colstart; j <= colend; j++)
             result->values[i - rowstart][j - colstart] = matrix->values[i][j];
@@ -432,7 +432,7 @@ Matrix_ptr partial(Matrix_ptr matrix, int rowstart, int rowend, int colstart, in
  *
  * @return true if items are equal, false otherwise.
  */
-bool is_symmetric(Matrix_ptr matrix) {
+bool is_symmetric(const Matrix* matrix) {
     for (int i = 0; i < matrix->row - 1; i++) {
         for (int j = i + 1; j < matrix->row; j++) {
             if (matrix->values[i][j] != matrix->values[j][i]) {
@@ -450,7 +450,7 @@ bool is_symmetric(Matrix_ptr matrix) {
  *
  * @return determinant of values {@link array}.
  */
-double determinant(Matrix_ptr matrix) {
+double determinant(const Matrix* matrix) {
     double det = 1, ratio;
     Matrix_ptr copy = clone(matrix);
     for (int i = 0; i < matrix->row; i++) {
@@ -546,7 +546,7 @@ void inverse(Matrix_ptr matrix) {
  *
  * @return Matrix type output.
  */
-Matrix_ptr cholesky_decomposition(Matrix_ptr matrix) {
+Matrix_ptr cholesky_decomposition(const Matrix* matrix) {
     Matrix_ptr b;
     double sum;
     b = create_matrix(matrix->row, matrix->col);
@@ -588,7 +588,7 @@ void rotate(Matrix_ptr matrix, double s, double tau, int i, int j, int k, int l)
  *
  * @return a sorted {@link vector} of {@link Eigenvector}s.
  */
-Array_list_ptr characteristics(Matrix_ptr matrix) {
+Array_list_ptr characteristics(const Matrix* matrix) {
     int j, iq, ip, i;
     double threshold, theta, tau, t, sm, s, h, g, c;
     Matrix_ptr matrix1 = clone(matrix);
@@ -676,7 +676,7 @@ Array_list_ptr characteristics(Matrix_ptr matrix) {
     return result;
 }
 
-Matrix_ptr sum_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
+Matrix_ptr sum_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     Matrix_ptr result = create_matrix(matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
         for (int j = 0; j < matrix1->col; j++) {
@@ -686,7 +686,7 @@ Matrix_ptr sum_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
     return result;
 }
 
-Matrix_ptr difference_matrix(Matrix_ptr matrix1, Matrix_ptr matrix2) {
+Matrix_ptr difference_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     Matrix_ptr result = create_matrix(matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
         for (int j = 0; j < matrix1->col; j++) {

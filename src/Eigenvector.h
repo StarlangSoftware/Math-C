@@ -19,6 +19,6 @@ Eigenvector_ptr create_eigenvector(double eigenvalue, Array_list_ptr vector);
 
 void free_eigenvector(Eigenvector_ptr eigenvector);
 
-int compare_eigenvector(Eigenvector_ptr first, Eigenvector_ptr second);
+int compare_eigenvector(const Eigenvector* first, const Eigenvector* second);
 
 #endif //MATH_EIGENVECTOR_H

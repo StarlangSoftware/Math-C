@@ -24,26 +24,26 @@ void add_item(Discrete_distribution_ptr discrete_distribution, char *item);
 
 void remove_item(Discrete_distribution_ptr discrete_distribution, char *item);
 
-void add_distribution(Discrete_distribution_ptr dst, Discrete_distribution_ptr added);
+void add_distribution(Discrete_distribution_ptr dst, const Discrete_distribution* added);
 
-void remove_distribution(Discrete_distribution_ptr dst, Discrete_distribution_ptr removed);
+void remove_distribution(Discrete_distribution_ptr dst, const Discrete_distribution* removed);
 
-int get_count(Discrete_distribution_ptr discrete_distribution, char *item);
+int get_count(const Discrete_distribution* discrete_distribution, const char *item);
 
-char *get_max_item(Discrete_distribution_ptr discrete_distribution);
+char *get_max_item(const Discrete_distribution* discrete_distribution);
 
-char *get_max_item_include_only(Discrete_distribution_ptr discrete_distribution, Array_list_ptr include_these_only);
+char *get_max_item_include_only(const Discrete_distribution* discrete_distribution, const Array_list* include_these_only);
 
-double get_probability(Discrete_distribution_ptr discrete_distribution, char *item);
+double get_probability(const Discrete_distribution* discrete_distribution, const char *item);
 
-double get_probability_laplace_smoothing(Discrete_distribution_ptr discrete_distribution, char *item);
+double get_probability_laplace_smoothing(const Discrete_distribution* discrete_distribution, const char *item);
 
-double entropy(Discrete_distribution_ptr discrete_distribution);
+double entropy(const Discrete_distribution* discrete_distribution);
 
-int get_index(Discrete_distribution_ptr discrete_distribution, char *item);
+int get_index(const Discrete_distribution* discrete_distribution, const char *item);
 
-Array_list_ptr get_items(Discrete_distribution_ptr discrete_distribution);
+Array_list_ptr get_items(const Discrete_distribution* discrete_distribution);
 
-Hash_map_ptr get_probability_distribution(Discrete_distribution_ptr discrete_distribution);
+Hash_map_ptr get_probability_distribution(const Discrete_distribution* discrete_distribution);
 
 #endif //MATH_DISCRETEDISTRIBUTION_H
