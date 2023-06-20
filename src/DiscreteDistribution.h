@@ -7,6 +7,7 @@
 
 
 #include <HashMap/LinkedHashMap.h>
+#include <stdio.h>
 
 struct discrete_distribution {
     Linked_hash_map_ptr map;
@@ -17,6 +18,8 @@ typedef struct discrete_distribution Discrete_distribution;
 typedef Discrete_distribution *Discrete_distribution_ptr;
 
 Discrete_distribution_ptr create_discrete_distribution();
+
+Discrete_distribution_ptr create_discrete_distribution2(FILE* input_file);
 
 void free_discrete_distribution(Discrete_distribution_ptr discrete_distribution);
 

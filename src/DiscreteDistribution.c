@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <FileUtils.h>
 #include "DiscreteDistribution.h"
 
 /**
@@ -15,6 +16,25 @@ Discrete_distribution_ptr create_discrete_distribution() {
     result->map = create_linked_hash_map((unsigned int (*)(const void *, int)) hash_function_string,
                                          (int (*)(const void *, const void *)) compare_string);
     result->sum = 0;
+    return result;
+}
+
+Discrete_distribution_ptr create_discrete_distribution2(FILE *input_file) {
+    int size;
+    char item[MAX_LINE_LENGTH];
+    int count;
+    Discrete_distribution_ptr result = malloc(sizeof(Discrete_distribution));
+    result->map = create_linked_hash_map((unsigned int (*)(const void *, int)) hash_function_string,
+                                         (int (*)(const void *, const void *)) compare_string);
+    result->sum = 0;
+    fscanf(input_file, "%d", &size);
+    for (int i = 0; i < size; i++){
+        fscanf(input_file, "%s%d", item, &count);
+        result->sum += count;
+        int *value = malloc(sizeof(int));
+        *value = count;
+        linked_hash_map_insert(result->map, item, value);
+    }
     return result;
 }
 
