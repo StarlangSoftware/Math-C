@@ -270,3 +270,11 @@ Hash_map_ptr get_probability_distribution(const Discrete_distribution* discrete_
     }
     return result;
 }
+
+int size_of_distribution(const Discrete_distribution *discrete_distribution) {
+    return discrete_distribution->map->hash_map->count;
+}
+
+bool contains_distribution(const Discrete_distribution *discrete_distribution, const char *item) {
+    return linked_hash_map_contains(discrete_distribution->map, item);
+}

@@ -49,4 +49,8 @@ Array_list_ptr get_items(const Discrete_distribution* discrete_distribution);
 
 Hash_map_ptr get_probability_distribution(const Discrete_distribution* discrete_distribution);
 
+int size_of_distribution(const Discrete_distribution* discrete_distribution);
+
+bool contains_distribution(const Discrete_distribution* discrete_distribution, const char *item);
+
 #endif //MATH_DISCRETEDISTRIBUTION_H
