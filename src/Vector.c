@@ -81,6 +81,18 @@ Vector_ptr create_vector4(double *values, int size) {
     return result;
 }
 
+Vector_ptr create_vector5(FILE *input_file) {
+    Vector_ptr result = malloc(sizeof(Vector));
+    result->values = create_array_list();
+    fscanf(input_file, "%d", &(result->size));
+    for (int i = 0; i < result->size; i++){
+        double value;
+        fscanf(input_file, "%lf", &value);
+        array_list_add_double(result->values, value);
+    }
+    return result;
+}
+
 /**
  * The biased method creates a {@link Vector} result, add adds each item of values {@link vector} into the result Vector.
  * Then, insert 1.0 to 0th position and return result {@link Vector}.

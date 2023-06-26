@@ -6,6 +6,7 @@
 #define MATH_VECTOR_H
 
 #include <ArrayList.h>
+#include <stdio.h>
 
 struct vector {
     int size;
@@ -22,6 +23,8 @@ Vector_ptr create_vector2(int size, double x);
 Vector_ptr create_vector3(int size, int index, double x);
 
 Vector_ptr create_vector4(double *values, int size);
+
+Vector_ptr create_vector5(FILE* input_file);
 
 void free_vector(Vector_ptr vector);
 
