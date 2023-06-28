@@ -696,3 +696,15 @@ Matrix_ptr difference_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     return result;
 }
 
+Matrix_ptr create_matrix5(FILE *input_file) {
+    int row, col;
+    fscanf(input_file, "%d %d", &row, &col);
+    Matrix_ptr result = create_matrix(row, col);
+    for (int i = 0; i < row; i++){
+        for (int j = 0; j < col; j++){
+            fscanf(input_file, "%lf", &result->values[i][j]);
+        }
+    }
+    return result;
+}
+

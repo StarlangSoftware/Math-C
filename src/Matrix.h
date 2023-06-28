@@ -24,6 +24,8 @@ Matrix_ptr create_matrix3(int size);
 
 Matrix_ptr create_matrix4(const Vector* vector1, const Vector* vector2);
 
+Matrix_ptr create_matrix5(FILE* input_file);
+
 Matrix_ptr clone(const Matrix* matrix);
 
 void allocate_matrix(Matrix_ptr matrix, int row, int col);
