@@ -31,7 +31,8 @@ Matrix_ptr create_matrix(int row, int col) {
  * @param min minimum value.
  * @param max maximum value.
  */
-Matrix_ptr create_matrix2(int row, int col, double min, double max) {
+Matrix_ptr create_matrix2(int row, int col, double min, double max, int seed) {
+    srandom(seed);
     Matrix_ptr result = malloc(sizeof(Matrix));
     allocate_matrix(result, row, col);
     for (int i = 0; i < row; i++) {

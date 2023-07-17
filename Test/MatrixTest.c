@@ -49,7 +49,7 @@ void testMultiplyWithConstant() {
             large->values[i][j] = 1.0;
         }
     }
-    Matrix_ptr random = create_matrix2(100, 100, 1, 10);
+    Matrix_ptr random = create_matrix2(100, 100, 1, 10, 1);
     double originalSum = sum_of_elements_of_matrix(random);
     multiply_with_constant(small, 4);
     if (36 != sum_of_elements_of_matrix(small)) {
@@ -81,7 +81,7 @@ void testDivideByConstant() {
             large->values[i][j] = 1.0;
         }
     }
-    Matrix_ptr random = create_matrix2(100, 100, 1, 10);
+    Matrix_ptr random = create_matrix2(100, 100, 1, 10, 1);
     double originalSum = sum_of_elements_of_matrix(random);
     divide_by_constant(small, 4);
     if (2.25 != sum_of_elements_of_matrix(small)) {

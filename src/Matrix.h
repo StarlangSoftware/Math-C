@@ -18,7 +18,7 @@ typedef Matrix *Matrix_ptr;
 
 Matrix_ptr create_matrix(int row, int col);
 
-Matrix_ptr create_matrix2(int row, int col, double min, double max);
+Matrix_ptr create_matrix2(int row, int col, double min, double max, int seed);
 
 Matrix_ptr create_matrix3(int size);
 
