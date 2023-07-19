@@ -104,7 +104,7 @@ Vector_ptr biased(const Vector* vector) {
     result->values = create_array_list();
     array_list_add_double(result->values, 1);
     for (int i = 0; i < vector->size; i++) {
-        array_list_add_double(result->values, array_list_get_double(result->values, i));
+        array_list_add_double(result->values, array_list_get_double(vector->values, i));
     }
     result->size = vector->size + 1;
     return result;
