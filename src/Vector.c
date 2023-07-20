@@ -194,7 +194,7 @@ int max_index_of_vector(const Vector* vector) {
 void sigmoid_of_vector(Vector_ptr vector) {
     for (int i = 0; i < vector->size; i++) {
         double *value = array_list_get(vector->values, i);
-        *value = 1 / (1 + exp(*value));
+        *value = 1 / (1 + exp(-(*value)));
     }
 }
 
