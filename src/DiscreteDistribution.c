@@ -9,7 +9,7 @@
 #include "DiscreteDistribution.h"
 
 /**
- * A constructor of {@link DiscreteDistribution} class which calls its super class.
+ * A constructor of DiscreteDistribution class which calls its super class.
  */
 Discrete_distribution_ptr create_discrete_distribution() {
     Discrete_distribution_ptr result = malloc(sizeof(Discrete_distribution));
@@ -81,11 +81,11 @@ void remove_item(Discrete_distribution_ptr discrete_distribution, char *item) {
 }
 
 /**
- * The addDistribution method takes a {@link DiscreteDistribution} as an input and loops through the entries in this distribution
+ * The addDistribution method takes a DiscreteDistribution as an input and loops through the entries in this distribution
  * and if this map contains a mapping for the entry it puts the entry with its value + entry, else it puts entry with its value.
  * It also accumulates the values of entries and assigns to the sum variable.
  *
- * @param distribution {@link DiscreteDistribution} type input.
+ * @param distribution DiscreteDistribution type input.
  */
 void add_distribution(Discrete_distribution_ptr dst, const Discrete_distribution* added) {
     Array_list_ptr list = linked_hash_map_key_value_list(added->map);
@@ -105,11 +105,11 @@ void add_distribution(Discrete_distribution_ptr dst, const Discrete_distribution
 }
 
 /**
- * The removeDistribution method takes a {@link DiscreteDistribution} as an input and loops through the entries in this distribution
+ * The removeDistribution method takes a DiscreteDistribution as an input and loops through the entries in this distribution
  * and if this map contains a mapping for the entry it puts the entry with its key - value, else it removes the entry.
  * It also decrements the value of entry from sum and assigns to the sum variable.
  *
- * @param distribution {@link DiscreteDistribution} type input.
+ * @param distribution DiscreteDistribution type input.
  */
 void remove_distribution(Discrete_distribution_ptr dst, const Discrete_distribution* removed) {
     Array_list_ptr list = linked_hash_map_key_value_list(removed->map);
@@ -160,10 +160,10 @@ char *get_max_item(const Discrete_distribution* discrete_distribution) {
 }
 
 /**
- * Another getMaxItem method which takes an {@link vector} of Strings. It loops through the items in this {@link vector}
+ * Another getMaxItem method which takes an vector of Strings. It loops through the items in this vector
  * and gets the item with maximum value.
  *
- * @param includeTheseOnly {@link vector} of Strings.
+ * @param includeTheseOnly vector of Strings.
  * @return the item with maximum value.
  */
 char *get_max_item_include_only(const Discrete_distribution* discrete_distribution, const Array_list* include_these_only) {

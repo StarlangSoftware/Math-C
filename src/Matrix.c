@@ -9,8 +9,8 @@
 #include "Eigenvector.h"
 
 /**
- * Another constructor of {@link Matrix} class which takes row and column numbers as inputs and creates new values
- * {@link array} with given parameters.
+ * Another constructor of Matrix class which takes row and column numbers as inputs and creates new values
+ * array with given parameters.
  *
  * @param row is used to create matrix.
  * @param col is used to create matrix.
@@ -22,8 +22,8 @@ Matrix_ptr create_matrix(int row, int col) {
 }
 
 /**
- * Another constructor of {@link Matrix} class which takes row, column, minimum and maximum values as inputs.
- * First it creates new values {@link array} with given row and column numbers. Then fills in the
+ * Another constructor of Matrix class which takes row, column, minimum and maximum values as inputs.
+ * First it creates new values array with given row and column numbers. Then fills in the
  * positions with random numbers using minimum and maximum inputs.
  *
  * @param row is used to create matrix.
@@ -44,7 +44,7 @@ Matrix_ptr create_matrix2(int row, int col, double min, double max, int seed) {
 }
 
 /**
- * Another constructor of {@link Matrix} class which takes size as input and creates new values {@link array}
+ * Another constructor of Matrix class which takes size as input and creates new values array
  * with using size input and assigns 1 to each element at the diagonal.
  *
  * @param size is used declaring the size of the array.
@@ -109,7 +109,7 @@ void add_value_to_matrix(Matrix_ptr matrix, int rowNo, int colNo, double value) 
 }
 
 /**
- * The increment method adds 1 to the item at given index of values {@link array}.
+ * The increment method adds 1 to the item at given index of values array.
  *
  * @param rowNo integer input for row number.
  * @param colNo integer input for column number.
@@ -119,18 +119,18 @@ void increment(Matrix_ptr matrix, int rowNo, int colNo) {
 }
 
 /**
- * The getRow method returns the vector of values {@link array} at given row input.
+ * The getRow method returns the vector of values array at given row input.
  *
  * @param _row integer input for row number.
- * @return Vector of values {@link array} at given row input.
+ * @return Vector of values array at given row input.
  */
 Vector_ptr get_row(const Matrix* matrix, int row) {
     return create_vector4(matrix->values[row], matrix->col);
 }
 
 /**
- * The getColumn method creates an {@link vector} and adds items at given column number of values {@link array}
- * to the {@link vector}.
+ * The getColumn method creates an vector and adds items at given column number of values array
+ * to the vector.
  *
  * @param column integer input for column number.
  * @return Vector of given column number.
@@ -160,10 +160,10 @@ void column_wise_normalize(Matrix_ptr matrix) {
 }
 
 /**
- * The multiplyWithConstant method takes a constant as an input and multiplies each item of values {@link array}
+ * The multiplyWithConstant method takes a constant as an input and multiplies each item of values array
  * with given constant.
  *
- * @param constant value to multiply items of values {@link array}.
+ * @param constant value to multiply items of values array.
  */
 void multiply_with_constant(Matrix_ptr matrix, double constant) {
     int i;
@@ -175,10 +175,10 @@ void multiply_with_constant(Matrix_ptr matrix, double constant) {
 }
 
 /**
- * The divideByConstant method takes a constant as an input and divides each item of values {@link array}
+ * The divideByConstant method takes a constant as an input and divides each item of values array
  * with given constant.
  *
- * @param constant value to divide items of values {@link array}.
+ * @param constant value to divide items of values array.
  */
 void divide_by_constant(Matrix_ptr matrix, double constant) {
     int i;
@@ -190,9 +190,9 @@ void divide_by_constant(Matrix_ptr matrix, double constant) {
 }
 
 /**
- * The add method takes a {@link Matrix} as an input and accumulates values {@link array} with the
- * corresponding items of given Matrix. If the sizes of both Matrix and values {@link array} do not match,
- * it throws {@link MatrixDimensionMismatch} exception.
+ * The add method takes a Matrix as an input and accumulates values array with the
+ * corresponding items of given Matrix. If the sizes of both Matrix and values array do not match,
+ * it throws MatrixDimensionMismatch exception.
  *
  * @param m Matrix type input.
  */
@@ -206,8 +206,8 @@ void add_matrix(Matrix_ptr matrix1, const Matrix* matrix2) {
 
 /**
  * The add method which takes a row number and a Vector as inputs. It sums up the corresponding values at the given row of
- * values {@link array} and given {@link Vector}. If the sizes of both Matrix and values
- * {@link array} do not match, it throws {@link MatrixColumnMismatch} exception.
+ * values array and given Vector. If the sizes of both Matrix and values
+ * array do not match, it throws MatrixColumnMismatch exception.
  *
  * @param rowNo integer input for row number.
  * @param v     Vector type input.
@@ -219,9 +219,9 @@ void add_vector_to_matrix(Matrix_ptr matrix, int row, const Vector* v) {
 }
 
 /**
- * The subtract method takes a {@link Matrix} as an input and subtracts from values {@link array} the
- * corresponding items of given Matrix. If the sizes of both Matrix and values {@link aArray} do not match,
- * it throws {@link MatrixDimensionMismatch} exception.
+ * The subtract method takes a Matrix as an input and subtracts from values array the
+ * corresponding items of given Matrix. If the sizes of both Matrix and values aArray do not match,
+ * it throws MatrixDimensionMismatch exception.
  *
  * @param m Matrix type input.
  */
@@ -234,12 +234,12 @@ void subtract_matrix(Matrix_ptr matrix1, const Matrix* matrix2) {
 }
 
 /**
- * The multiplyWithVectorFromLeft method takes a Vector as an input and creates a result {@link array}.
- * Then, multiplies values of input Vector starting from the left side with the values {@link array},
- * accumulates the multiplication, and assigns to the result {@link array}. If the sizes of both Vector
- * and row number do not match, it throws {@link MatrixRowMismatch} exception.
+ * The multiplyWithVectorFromLeft method takes a Vector as an input and creates a result array.
+ * Then, multiplies values of input Vector starting from the left side with the values array,
+ * accumulates the multiplication, and assigns to the result array. If the sizes of both Vector
+ * and row number do not match, it throws MatrixRowMismatch exception.
  *
- * @param v {@link Vector} type input.
+ * @param v Vector type input.
  * @return Vector that holds the result.
  */
 Vector_ptr multiply_with_vector_from_left(const Matrix* matrix, const Vector* vector) {
@@ -254,12 +254,12 @@ Vector_ptr multiply_with_vector_from_left(const Matrix* matrix, const Vector* ve
 }
 
 /**
- * The multiplyWithVectorFromRight method takes a Vector as an input and creates a result {@link array}.
- * Then, multiplies values of input Vector starting from the right side with the values {@link array},
- * accumulates the multiplication, and assigns to the result {@link array}. If the sizes of both Vector
- * and row number do not match, it throws {@link MatrixColumnMismatch} exception.
+ * The multiplyWithVectorFromRight method takes a Vector as an input and creates a result array.
+ * Then, multiplies values of input Vector starting from the right side with the values array,
+ * accumulates the multiplication, and assigns to the result array. If the sizes of both Vector
+ * and row number do not match, it throws MatrixColumnMismatch exception.
  *
- * @param v {@link Vector} type input.
+ * @param v Vector type input.
  * @return Vector that holds the result.
  */
 Vector_ptr multiply_with_vector_from_right(const Matrix* matrix, const Vector* vector) {
@@ -275,10 +275,10 @@ Vector_ptr multiply_with_vector_from_right(const Matrix* matrix, const Vector* v
 
 /**
  * The columnSum method takes a column number as an input and accumulates items at given column number of values
- * {@link array}.
+ * array.
  *
  * @param columnNo Column number input.
- * @return summation of given column of values {@link array}.
+ * @return summation of given column of values array.
  */
 double column_sum(const Matrix* matrix, int columnNo) {
     double sum = 0;
@@ -289,8 +289,8 @@ double column_sum(const Matrix* matrix, int columnNo) {
 }
 
 /**
- * The sumOfRows method creates a mew result {@link Vector} and adds the result of columnDum method's corresponding
- * index to the newly created result {@link Vector}.
+ * The sumOfRows method creates a mew result Vector and adds the result of columnDum method's corresponding
+ * index to the newly created result Vector.
  *
  * @return Vector that holds column sum.
  */
@@ -304,10 +304,10 @@ Vector_ptr sum_of_rows(const Matrix* matrix) {
 
 /**
  * The rowSum method takes a row number as an input and accumulates items at given row number of values
- * {@link array}.
+ * array.
  *
  * @param rowNo Row number input.
- * @return summation of given row of values {@link array}.
+ * @return summation of given row of values array.
  */
 double row_sum(const Matrix* matrix, int row) {
     double sum = 0;
@@ -318,13 +318,13 @@ double row_sum(const Matrix* matrix, int row) {
 }
 
 /**
- * The multiply method takes a {@link Matrix} as an input. First it creates a result {@link Matrix} and puts the
- * accumulatated multiplication of values {@link array} and given {@link Matrix} into result
- * {@link Matrix}. If the size of Matrix's row size and values {@link array}'s column size do not match,
- * it throws {@link MatrixRowColumnMismatch} exception.
+ * The multiply method takes a Matrix as an input. First it creates a result Matrix and puts the
+ * accumulatated multiplication of values array and given Matrix into result
+ * Matrix. If the size of Matrix's row size and values array's column size do not match,
+ * it throws MatrixRowColumnMismatch exception.
  *
  * @param m Matrix type input.
- * @return result {@link Matrix}.
+ * @return result Matrix.
  */
 Matrix_ptr multiply_with_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     double sum;
@@ -343,12 +343,12 @@ Matrix_ptr multiply_with_matrix(const Matrix* matrix1, const Matrix* matrix2) {
 }
 
 /**
- * The elementProduct method takes a {@link Matrix} as an input and performs element wise multiplication. Puts result
+ * The elementProduct method takes a Matrix as an input and performs element wise multiplication. Puts result
  * to the newly created Matrix. If the size of Matrix's row and column size does not match with the values
- * {@link array}'s row and column size, it throws {@link MatrixDimensionMismatch} exception.
+ * array's row and column size, it throws MatrixDimensionMismatch exception.
  *
  * @param m Matrix type input.
- * @return result {@link Matrix}.
+ * @return result Matrix.
  */
 Matrix_ptr element_product_with_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     Matrix_ptr result = malloc(sizeof(Matrix));
@@ -362,10 +362,10 @@ Matrix_ptr element_product_with_matrix(const Matrix* matrix1, const Matrix* matr
 }
 
 /**
- * The sumOfElements method accumulates all the items in values {@link array} and
+ * The sumOfElements method accumulates all the items in values array and
  * returns this summation.
  *
- * @return sum of the items of values {@link array}.
+ * @return sum of the items of values array.
  */
 double sum_of_elements_of_matrix(const Matrix* matrix) {
     double sum = 0.0;
@@ -391,8 +391,8 @@ double trace(const Matrix* matrix) {
 }
 
 /**
- * The transpose method creates a new {@link Matrix}, then takes the transpose of values {@link array}
- * and puts transposition to the {@link Matrix}.
+ * The transpose method creates a new Matrix, then takes the transpose of values array
+ * and puts transposition to the Matrix.
  *
  * @return Matrix type output.
  */
@@ -408,9 +408,9 @@ Matrix_ptr transpose(const Matrix* matrix) {
 }
 
 /**
- * The partial method takes 4 integer inputs; rowstart, rowend, colstart, colend and creates a {@link Matrix} size of
- * rowend - rowstart + 1 x colend - colstart + 1. Then, puts corresponding items of values {@link array}
- * to the new result {@link Matrix}.
+ * The partial method takes 4 integer inputs; rowstart, rowend, colstart, colend and creates a Matrix size of
+ * rowend - rowstart + 1 x colend - colstart + 1. Then, puts corresponding items of values array
+ * to the new result Matrix.
  *
  * @param rowstart integer input for defining starting index of row.
  * @param rowend   integer input for defining ending index of row.
@@ -428,7 +428,7 @@ Matrix_ptr partial(const Matrix* matrix, int rowstart, int rowend, int colstart,
 }
 
 /**
- * The isSymmetric method compares each item of values {@link array} at positions (i, j) with (j, i)
+ * The isSymmetric method compares each item of values array at positions (i, j) with (j, i)
  * and returns true if they are equal, false otherwise.
  *
  * @return true if items are equal, false otherwise.
@@ -445,11 +445,11 @@ bool is_symmetric(const Matrix* matrix) {
 }
 
 /**
- * The determinant method first creates a new {@link array}, and copies the items of  values
- * {@link array} into new {@link array}. Then, calculates the determinant of this
- * new {@link array}.
+ * The determinant method first creates a new array, and copies the items of  values
+ * array into new array. Then, calculates the determinant of this
+ * new array.
  *
- * @return determinant of values {@link array}.
+ * @return determinant of values array.
  */
 double determinant(const Matrix* matrix) {
     double det = 1, ratio;
@@ -469,7 +469,7 @@ double determinant(const Matrix* matrix) {
 }
 
 /**
- * The inverse method finds the inverse of values {@link array}.
+ * The inverse method finds the inverse of values array.
  */
 void inverse(Matrix_ptr matrix) {
     double big;
@@ -541,9 +541,9 @@ void inverse(Matrix_ptr matrix) {
 }
 
 /**
- * The choleskyDecomposition method creates a new {@link Matrix} and puts the Cholesky Decomposition of values Array
- * into this {@link Matrix}. Also, it throws {@link MatrixNotSymmetric} exception if it is not symmetric and
- * {@link MatrixNotPositiveDefinite} exception if the summation is negative.
+ * The choleskyDecomposition method creates a new Matrix and puts the Cholesky Decomposition of values Array
+ * into this Matrix. Also, it throws MatrixNotSymmetric exception if it is not symmetric and
+ * MatrixNotPositiveDefinite exception if the summation is negative.
  *
  * @return Matrix type output.
  */
@@ -567,7 +567,7 @@ Matrix_ptr cholesky_decomposition(const Matrix* matrix) {
 }
 
 /**
- * The rotate method rotates values {@link array} according to given inputs.
+ * The rotate method rotates values array according to given inputs.
  *
  * @param s   double input.
  * @param tau double input.
@@ -584,10 +584,10 @@ void rotate(Matrix_ptr matrix, double s, double tau, int i, int j, int k, int l)
 }
 
 /**
- * The characteristics method finds and returns a sorted {@link vector} of {@link Eigenvector}s. And it throws
- * {@link MatrixNotSymmetric} exception if it is not symmetric.
+ * The characteristics method finds and returns a sorted vector of Eigenvectors. And it throws
+ * MatrixNotSymmetric exception if it is not symmetric.
  *
- * @return a sorted {@link vector} of {@link Eigenvector}s.
+ * @return a sorted vector of Eigenvectors.
  */
 Array_list_ptr characteristics(const Matrix* matrix) {
     int j, iq, ip, i;
