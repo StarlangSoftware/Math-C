@@ -83,17 +83,11 @@ Matrix_ptr clone(const Matrix* matrix) {
 void allocate_matrix(Matrix_ptr matrix, int row, int col) {
     matrix->row = row;
     matrix->col = col;
-    matrix->values = malloc(matrix->row * sizeof(double *));
-    for (int i = 0; i < matrix->row; i++) {
-        matrix->values[i] = calloc(matrix->col, sizeof(double));
-    }
+    matrix->values = allocate_2d(matrix->row, matrix->col);
 }
 
 void free_matrix(Matrix_ptr matrix) {
-    for (int i = 0; i < matrix->row; i++) {
-        free(matrix->values[i]);
-    }
-    free(matrix->values);
+    free_2d(matrix->values, matrix->row);
     free(matrix);
 }
 
