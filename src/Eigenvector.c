@@ -2,7 +2,6 @@
 // Created by Olcay Taner YILDIZ on 13.02.2023.
 //
 
-#include <stdlib.h>
 #include "Eigenvector.h"
 #include "Memory/Memory.h"
 

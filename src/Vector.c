@@ -2,7 +2,6 @@
 // Created by Olcay Taner YILDIZ on 10.02.2023.
 //
 
-#include <stdlib.h>
 #include <math.h>
 #include <Memory/Memory.h>
 #include "Vector.h"

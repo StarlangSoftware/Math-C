@@ -2,7 +2,6 @@
 // Created by Olcay Taner YILDIZ on 9.02.2023.
 //
 
-#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <FileUtils.h>
