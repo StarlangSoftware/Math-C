@@ -4,9 +4,10 @@
 
 #include <stdlib.h>
 #include "Eigenvector.h"
+#include "Memory/Memory.h"
 
 Eigenvector_ptr create_eigenvector(double eigenvalue, Array_list_ptr vector) {
-    Eigenvector_ptr result = malloc(sizeof(Eigenvector));
+    Eigenvector_ptr result = malloc_(sizeof(Eigenvector), "create_eigenvector");
     result->eigenvalue = eigenvalue;
     result->vector = create_vector(vector);
     return result;
@@ -14,7 +15,7 @@ Eigenvector_ptr create_eigenvector(double eigenvalue, Array_list_ptr vector) {
 
 void free_eigenvector(Eigenvector_ptr eigenvector) {
     free_vector(eigenvector->vector);
-    free(eigenvector);
+    free_(eigenvector);
 }
 
 int compare_eigenvector(const Eigenvector* first, const Eigenvector* second) {
