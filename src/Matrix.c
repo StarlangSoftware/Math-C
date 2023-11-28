@@ -238,14 +238,16 @@ void subtract_matrix(Matrix_ptr matrix1, const Matrix* matrix2) {
  * @return Vector that holds the result.
  */
 Vector_ptr multiply_with_vector_from_left(const Matrix* matrix, const Vector* vector) {
-    double *result = malloc_(matrix->col * sizeof(double), "multiply_with_vector_from_left");
+    double *values = malloc_(matrix->col * sizeof(double), "multiply_with_vector_from_left");
     for (int i = 0; i < matrix->col; i++) {
-        result[i] = 0.0;
+        values[i] = 0.0;
         for (int j = 0; j < matrix->row; j++) {
-            result[i] += get_value(vector, j) * matrix->values[j][i];
+            values[i] += get_value(vector, j) * matrix->values[j][i];
         }
     }
-    return create_vector4(result, matrix->col);
+    Vector_ptr result = create_vector4(values, matrix->col);
+    free_(values);
+    return result;
 }
 
 /**
@@ -258,14 +260,16 @@ Vector_ptr multiply_with_vector_from_left(const Matrix* matrix, const Vector* ve
  * @return Vector that holds the result.
  */
 Vector_ptr multiply_with_vector_from_right(const Matrix* matrix, const Vector* vector) {
-    double *result = malloc_(matrix->row * sizeof(double), "multiply_with_vector_from_right");
+    double *values = malloc_(matrix->row * sizeof(double), "multiply_with_vector_from_right");
     for (int i = 0; i < matrix->row; i++) {
-        result[i] = 0;
+        values[i] = 0;
         for (int j = 0; j < matrix->col; j++) {
-            result[i] += matrix->values[i][j] * get_value(vector, j);
+            values[i] += matrix->values[i][j] * get_value(vector, j);
         }
     }
-    return create_vector4(result, matrix->row);
+    Vector_ptr result = create_vector4(values, matrix->row);
+    free_(values);
+    return result;
 }
 
 /**
@@ -290,11 +294,13 @@ double column_sum(const Matrix* matrix, int columnNo) {
  * @return Vector that holds column sum.
  */
 Vector_ptr sum_of_rows(const Matrix* matrix) {
-    double *result = malloc_(matrix->col * sizeof(double), "sum_of_rows");
+    double *values = malloc_(matrix->col * sizeof(double), "sum_of_rows");
     for (int i = 0; i < matrix->col; i++) {
-        result[i] = column_sum(matrix, i);
+        values[i] = column_sum(matrix, i);
     }
-    return create_vector4(result, matrix->col);
+    Vector_ptr result = create_vector4(values, matrix->col);
+    free_(values);
+    return result;
 }
 
 /**
@@ -530,6 +536,7 @@ void inverse(Matrix_ptr matrix) {
             }
         }
     }
+    free_matrix(b);
     free_(indxc);
     free_(indxr);
     free_(ipiv);
