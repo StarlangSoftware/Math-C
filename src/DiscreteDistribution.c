@@ -73,6 +73,7 @@ void remove_item(Discrete_distribution_ptr discrete_distribution, char *item) {
         (*previous_value)--;
         if (*previous_value == 0) {
             linked_hash_map_remove(discrete_distribution->map, item, NULL);
+            free_(previous_value);
         }
         discrete_distribution->sum--;
     }
