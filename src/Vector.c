@@ -296,7 +296,9 @@ Vector_ptr vector_difference(const Vector* vector, const Vector* subtracted) {
         values[i] = array_list_get_double(vector->values, i) -
                     array_list_get_double(subtracted->values, i);
     }
-    return create_vector4(values, vector->size);
+    Vector_ptr result = create_vector4(values, vector->size);
+    free_(values);
+    return result;
 }
 
 /**
