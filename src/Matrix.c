@@ -478,9 +478,9 @@ void inverse(Matrix_ptr matrix) {
     int i, icol, irow, k, l, ll;
     Matrix_ptr b = create_matrix3(matrix->row);
     int *indxc, *indxr, *ipiv;
-    indxc = calloc(matrix->row, sizeof(int));
-    indxr = calloc(matrix->row, sizeof(int));
-    ipiv = calloc(matrix->row, sizeof(int));
+    indxc = calloc_(matrix->row, sizeof(int), "inverse_1");
+    indxr = calloc_(matrix->row, sizeof(int), "inverse_2");
+    ipiv = calloc_(matrix->row, sizeof(int), "inverse_3");
     for (i = 1; i <= matrix->row; i++) {
         big = 0.0;
         irow = -1;
