@@ -72,7 +72,7 @@ void remove_item(Discrete_distribution_ptr discrete_distribution, char *item) {
         int *previous_value = linked_hash_map_get(discrete_distribution->map, item);
         (*previous_value)--;
         if (*previous_value == 0) {
-            linked_hash_map_remove(discrete_distribution->map, item, NULL);
+            linked_hash_map_remove2(discrete_distribution->map, item, NULL);
             free_(previous_value);
         }
         discrete_distribution->sum--;
@@ -118,7 +118,7 @@ void remove_distribution(Discrete_distribution_ptr dst, const Discrete_distribut
             int *previous_value = linked_hash_map_get(dst->map, hash_node->key);
             (*previous_value) -= *(int *) hash_node->value;
             if (*previous_value == 0) {
-                linked_hash_map_remove(dst->map, hash_node->key, free_);
+                linked_hash_map_remove2(dst->map, hash_node->key, free_);
             }
         }
         dst->sum -= *((int *) hash_node->value);
