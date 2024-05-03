@@ -679,6 +679,13 @@ Array_list_ptr characteristics(const Matrix* matrix) {
     return result;
 }
 
+/**
+ * The sum_matrix method takes two matrices as an input and sums values array of first with the
+ * corresponding items of second Matrix and returns as a new Matrix.
+ * @param matrix1 First matrix to be added.
+ * @param matrix2 Second matrix to be added.
+ * @return Sum of matrix1 and matrix2.
+ */
 Matrix_ptr sum_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     Matrix_ptr result = create_matrix(matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
@@ -689,6 +696,13 @@ Matrix_ptr sum_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     return result;
 }
 
+/**
+ * The difference_matrix method takes two matrices as an input and subtracts values array of second from the
+ * corresponding items of first Matrix and returns as a new Matrix.
+ * @param matrix1 First matrix from which second matrix is subtracted.
+ * @param matrix2 Second matrix to be subtracted.
+ * @return Difference of matrix1 and matrix2.
+ */
 Matrix_ptr difference_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     Matrix_ptr result = create_matrix(matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
@@ -699,6 +713,11 @@ Matrix_ptr difference_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     return result;
 }
 
+/**
+ * Reads a matrix from an input file
+ * @param input_file Input file.
+ * @return Matrix created from input file.
+ */
 Matrix_ptr create_matrix5(FILE *input_file) {
     int row, col;
     fscanf(input_file, "%d %d", &row, &col);

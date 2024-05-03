@@ -476,6 +476,13 @@ double sum_of_vector(const Vector* vector) {
     return total;
 }
 
+/**
+ * Swaps two elements with the given indexes.
+ *
+ * @param vector Current vector
+ * @param index1 First index
+ * @param index2 Second index
+ */
 void swap_vector(Vector_ptr vector, int index1, int index2) {
     double tmp;
     double *value1 = array_list_get(vector->values, index1);

@@ -47,6 +47,7 @@ void free_discrete_distribution(Discrete_distribution_ptr discrete_distribution)
  * The addItem method takes a String item as an input and if this map contains a mapping for the item it puts the item
  * with given value + 1, else it puts item with value of 1.
  *
+ * @param discrete_distribution Current discrete distribution
  * @param item string input.
  */
 void add_item(Discrete_distribution_ptr discrete_distribution, char *item) {
@@ -65,6 +66,7 @@ void add_item(Discrete_distribution_ptr discrete_distribution, char *item) {
  * The removeItem method takes a String item as an input and if this map contains a mapping for the item it puts the item
  * with given value - 1, and if its value is 0, it removes the item.
  *
+ * @param discrete_distribution Current discrete distribution
  * @param item String input.
  */
 void remove_item(Discrete_distribution_ptr discrete_distribution, char *item) {
@@ -84,7 +86,8 @@ void remove_item(Discrete_distribution_ptr discrete_distribution, char *item) {
  * and if this map contains a mapping for the entry it puts the entry with its value + entry, else it puts entry with its value.
  * It also accumulates the values of entries and assigns to the sum variable.
  *
- * @param distribution DiscreteDistribution type input.
+ * @param dst Current discrete distribution
+ * @param added Added DiscreteDistribution.
  */
 void add_distribution(Discrete_distribution_ptr dst, const Discrete_distribution* added) {
     Array_list_ptr list = linked_hash_map_key_value_list(added->map);
@@ -108,7 +111,8 @@ void add_distribution(Discrete_distribution_ptr dst, const Discrete_distribution
  * and if this map contains a mapping for the entry it puts the entry with its key - value, else it removes the entry.
  * It also decrements the value of entry from sum and assigns to the sum variable.
  *
- * @param distribution DiscreteDistribution type input.
+ * @param dst Current discrete distribution
+ * @param removed DiscreteDistribution type input.
  */
 void remove_distribution(Discrete_distribution_ptr dst, const Discrete_distribution* removed) {
     Array_list_ptr list = linked_hash_map_key_value_list(removed->map);
@@ -130,6 +134,7 @@ void remove_distribution(Discrete_distribution_ptr dst, const Discrete_distribut
  * The getCount method takes an item as an input returns the value to which the specified item is mapped, or {@code null}
  * if this map contains no mapping for the key.
  *
+ * @param discrete_distribution Current discrete distribution
  * @param item is used to search for value.
  * @return the value to which the specified item is mapped
  */
@@ -140,6 +145,7 @@ int get_count(const Discrete_distribution* discrete_distribution, const char *it
 /**
  * The getMaxItem method loops through the entries and gets the entry with maximum value.
  *
+ * @param discrete_distribution Current discrete distribution
  * @return the entry with maximum value.
  */
 char *get_max_item(const Discrete_distribution* discrete_distribution) {
@@ -161,6 +167,7 @@ char *get_max_item(const Discrete_distribution* discrete_distribution) {
  * Another getMaxItem method which takes an vector of Strings. It loops through the items in this vector
  * and gets the item with maximum value.
  *
+ * @param discrete_distribution Current discrete distribution
  * @param includeTheseOnly vector of Strings.
  * @return the item with maximum value.
  */
@@ -185,6 +192,7 @@ char *get_max_item_include_only(const Discrete_distribution* discrete_distributi
  * The getProbability method takes an item as an input returns the value to which the specified item is mapped over sum,
  * or 0.0 if this map contains no mapping for the key.
  *
+ * @param discrete_distribution Current discrete distribution
  * @param item is used to search for probability.
  * @return the probability to which the specified item is mapped.
  */
@@ -200,6 +208,7 @@ double get_probability(const Discrete_distribution* discrete_distribution, const
  * The getProbabilityLaplaceSmoothing method takes an item as an input returns the smoothed value to which the specified
  * item is mapped over sum, or 1.0 over sum if this map contains no mapping for the key.
  *
+ * @param discrete_distribution Current discrete distribution
  * @param item is used to search for probability.
  * @return the smoothed probability to which the specified item is mapped.
  */
@@ -216,6 +225,7 @@ double get_probability_laplace_smoothing(const Discrete_distribution* discrete_d
 /**
  * The entropy method loops through the values and calculates the entropy of these values.
  *
+ * @param discrete_distribution Current discrete distribution
  * @return entropy value.
  */
 double entropy(const Discrete_distribution* discrete_distribution) {
@@ -230,6 +240,13 @@ double entropy(const Discrete_distribution* discrete_distribution) {
     return total;
 }
 
+/**
+ * The getIndex method takes an item as an input and returns the index of given item.
+ *
+ * @param discrete_distribution Current discrete distribution
+ * @param item to search for index.
+ * @return index of given item.
+ */
 int get_index(const Discrete_distribution* discrete_distribution, const char *item) {
     int i = 0;
     Node_ptr iterator = discrete_distribution->map->linked_list->head;
@@ -244,6 +261,11 @@ int get_index(const Discrete_distribution* discrete_distribution, const char *it
     return -1;
 }
 
+/**
+ * Returns the items in the distribution as an array list
+ * @param discrete_distribution Current discrete distribution
+ * @return Items in the distribution as a vector
+ */
 Array_list_ptr get_items(const Discrete_distribution* discrete_distribution) {
     Array_list_ptr result = create_array_list();
     Node_ptr iterator = discrete_distribution->map->linked_list->head;
@@ -255,6 +277,11 @@ Array_list_ptr get_items(const Discrete_distribution* discrete_distribution) {
     return result;
 }
 
+/**
+ * Returns the distribution as a probability distribution
+ * @param discrete_distribution Current discrete distribution
+ * @return Probability distribution
+ */
 Hash_map_ptr get_probability_distribution(const Discrete_distribution* discrete_distribution) {
     Hash_map_ptr result = create_hash_map((unsigned int (*)(const void *, int)) hash_function_string,
                                           (int (*)(const void *, const void *)) compare_string);
@@ -269,10 +296,21 @@ Hash_map_ptr get_probability_distribution(const Discrete_distribution* discrete_
     return result;
 }
 
+/**
+ * Returns number of items in the discrete distribution.
+ * @param discrete_distribution Current discrete distribution
+ * @return Number of items in the discrete distribution.
+ */
 int size_of_distribution(const Discrete_distribution *discrete_distribution) {
     return discrete_distribution->map->hash_map->count;
 }
 
+/**
+ * Checks if the given item exists in the current distribution.
+ * @param discrete_distribution Current discrete distribution
+ * @param item Item to be searched.
+ * @return True if the distribution contains the item, false otherwise.
+ */
 bool contains_distribution(const Discrete_distribution *discrete_distribution, const char *item) {
     return linked_hash_map_contains(discrete_distribution->map, item);
 }
