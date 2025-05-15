@@ -2,10 +2,9 @@
 // Created by Olcay Taner YILDIZ on 13.02.2023.
 //
 
-#include "Vector.h"
-
 #ifndef MATH_MATRIX_H
 #define MATH_MATRIX_H
+#include "Vector.h"
 
 struct matrix {
     int row;

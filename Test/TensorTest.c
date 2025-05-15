@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <math.h>
-#include <string.h> 
-#include <stdbool.h> 
-#include "../src/Tensor.c"
+#include <stdbool.h>
+#include <Memory/Memory.h>
+
+#include "../src/Tensor.h"
 
 // Helper function to compute the total number of elements in a tensor
 // Replicating from tensor.c as it's likely static there.
 int compute_total_elements_helper(const int *shape, int dimensions) {
     int total_elements = 1;
     for (int i = 0; i < dimensions; i++) {
-        if (shape[i] <= 0) return 0; 
+        if (shape[i] <= 0) return 0;
         total_elements *= shape[i];
     }
     return total_elements;
@@ -46,18 +46,19 @@ void print_test_result(const char *test_name, bool passed) {
 
 // Helper function to convert a flat index to multi-dimensional indices based on strides.
 int *unflatten_index_helper(int flat_index, const int *shape, const int *strides, int dimensions) {
-    int *indices = malloc(dimensions * sizeof(int)); // Use standard malloc
+    int *indices = malloc_(dimensions * sizeof(int), "unflatten_index_helper"); // Use standard malloc
     if (!indices) {
         perror("Failed to allocate memory for unflattened indices in helper");
-        exit(EXIT_FAILURE); 
+        exit(EXIT_FAILURE);
     }
     int temp_flat_index = flat_index;
     for (int i = 0; i < dimensions; i++) {
-        if (strides[i] == 0) { // Avoid division by zero if a dimension is 0
-             indices[i] = 0;
+        if (strides[i] == 0) {
+            // Avoid division by zero if a dimension is 0
+            indices[i] = 0;
         } else {
-             indices[i] = temp_flat_index / strides[i];
-             temp_flat_index %= strides[i];
+            indices[i] = temp_flat_index / strides[i];
+            temp_flat_index %= strides[i];
         }
     }
     return indices;
@@ -82,7 +83,8 @@ void test_create_and_free() {
     double data2[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     int shape2[] = {2, 3};
     Tensor *t2 = create_tensor(data2, shape2, 2);
-     if (!t2 || t2->dimensions != 2 || t2->shape[0] != 2 || t2->shape[1] != 3 || compute_total_elements_helper(shape2, 2) != 6) {
+    if (!t2 || t2->dimensions != 2 || t2->shape[0] != 2 || t2->shape[1] != 3 || compute_total_elements_helper(shape2, 2)
+        != 6) {
         passed = false;
     }
     free_tensor(t2);
@@ -90,21 +92,24 @@ void test_create_and_free() {
     // Test Case 3: Empty Tensor (shape with 0)
     int shape3[] = {0, 5};
     Tensor *t3 = create_tensor(NULL, shape3, 2); // Data should be NULL for 0 elements
-    if (!t3 || t3->dimensions != 2 || t3->shape[0] != 0 || t3->shape[1] != 5 || compute_total_elements_helper(shape3, 2) != 0) {
-         passed = false;
+    if (!t3 || t3->dimensions != 2 || t3->shape[0] != 0 || t3->shape[1] != 5 || compute_total_elements_helper(shape3, 2)
+        != 0) {
+        passed = false;
     }
     free_tensor(t3);
 
     // Test Case 4: Invalid shape (NULL)
     Tensor *t4 = create_tensor(data1, NULL, 1);
-    if (t4 != NULL) { // Should return NULL on invalid input
+    if (t4 != NULL) {
+        // Should return NULL on invalid input
         passed = false;
-        free_tensor(t4); 
+        free_tensor(t4);
     }
 
-     // Test Case 5: Invalid dimensions (<= 0)
+    // Test Case 5: Invalid dimensions (<= 0)
     Tensor *t5 = create_tensor(data1, shape1, 0);
-    if (t5 != NULL) { // Should return NULL
+    if (t5 != NULL) {
+        // Should return NULL
         passed = false;
         free_tensor(t5);
     }
@@ -134,7 +139,7 @@ void test_get_set() {
     int indices4[] = {0, 1};
     set_tensor_value(t, indices4, 99.0);
     if (fabs(get_tensor_value(t, indices4) - 99.0) > 1e-9) passed = false;
-     int indices5[] = {1, 2};
+    int indices5[] = {1, 2};
     set_tensor_value(t, indices5, -5.5);
     if (fabs(get_tensor_value(t, indices5) - -5.5) > 1e-9) passed = false;
 
@@ -155,11 +160,12 @@ void test_reshape() {
     // Test Case 1: Reshape to different shape with same element count
     int new_shape1[] = {6};
     Tensor *reshaped1 = reshape_tensor(t, new_shape1, 1);
-     if (!reshaped1 || reshaped1->dimensions != 1 || reshaped1->shape[0] != 6 || compute_total_elements_helper(new_shape1, 1) != 6) {
+    if (!reshaped1 || reshaped1->dimensions != 1 || reshaped1->shape[0] != 6 ||
+        compute_total_elements_helper(new_shape1, 1) != 6) {
         passed = false;
     } else {
         // Check data integrity (should be the same flattened data)
-        for(int i=0; i<6; ++i) {
+        for (int i = 0; i < 6; ++i) {
             int idx[] = {i};
             if (fabs(get_tensor_value(reshaped1, idx) - data[i]) > 1e-9) passed = false;
         }
@@ -169,17 +175,18 @@ void test_reshape() {
     // Test Case 2: Reshape to another valid shape
     int new_shape2[] = {3, 2};
     Tensor *reshaped2 = reshape_tensor(t, new_shape2, 2);
-     if (!reshaped2 || reshaped2->dimensions != 2 || reshaped2->shape[0] != 3 || reshaped2->shape[1] != 2 || compute_total_elements_helper(new_shape2, 2) != 6) {
+    if (!reshaped2 || reshaped2->dimensions != 2 || reshaped2->shape[0] != 3 || reshaped2->shape[1] != 2 ||
+        compute_total_elements_helper(new_shape2, 2) != 6) {
         passed = false;
     } else {
         // Check data integrity
         double expected_data2[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}; // Flattened data remains the same
-        for(int i=0; i<6; ++i) {
+        for (int i = 0; i < 6; ++i) {
             int idx_flat[] = {i};
             // Using the helper function defined in the test file
             int *idx_multi = unflatten_index_helper(i, reshaped2->shape, reshaped2->strides, reshaped2->dimensions);
             if (fabs(get_tensor_value(reshaped2, idx_multi) - expected_data2[i]) > 1e-9) passed = false;
-            free(idx_multi); 
+            free(idx_multi);
         }
     }
     free_tensor(reshaped2);
@@ -190,13 +197,13 @@ void test_reshape() {
     Tensor *reshaped3 = reshape_tensor(t, new_shape3, 1);
     if (reshaped3 != NULL) {
         passed = false;
-        free_tensor(reshaped3); 
+        free_tensor(reshaped3);
     }
 
-     // Test Case 4: Reshape to empty shape
+    // Test Case 4: Reshape to empty shape
     int new_shape4[] = {0};
     Tensor *reshaped4 = reshape_tensor(t, new_shape4, 1);
-    if (reshaped4 != NULL) { 
+    if (reshaped4 != NULL) {
         passed = false;
         free_tensor(reshaped4);
     }
@@ -221,7 +228,7 @@ void test_transpose() {
     if (!transposed1 || transposed1->dimensions != 2 || transposed1->shape[0] != 3 || transposed1->shape[1] != 2) {
         passed = false;
     } else {
-        double expected_data1[] = {1.0, 4.0, 2.0, 5.0, 3.0, 6.0}; 
+        double expected_data1[] = {1.0, 4.0, 2.0, 5.0, 3.0, 6.0};
         int total_elements = compute_total_elements_helper(transposed1->shape, transposed1->dimensions);
         for (int i = 0; i < total_elements; i++) {
             if (fabs(transposed1->data[i] - expected_data1[i]) > 1e-9) passed = false;
@@ -237,12 +244,13 @@ void test_transpose() {
     int axes2[] = {2, 0, 1}; // Transpose axes (0, 1, 2) -> (2, 0, 1)
     Tensor *transposed2 = transpose_tensor(t2, axes2); // New shape {2, 2, 2}
 
-    if (!transposed2 || transposed2->dimensions != 3 || transposed2->shape[0] != 2 || transposed2->shape[1] != 2 || transposed2->shape[2] != 2) {
-         passed = false;
+    if (!transposed2 || transposed2->dimensions != 3 || transposed2->shape[0] != 2 || transposed2->shape[1] != 2 ||
+        transposed2->shape[2] != 2) {
+        passed = false;
     } else {
         // Original indices (i, j, k) map to new indices (k, i, j)
-        double expected_data2[] = {1, 3, 5, 7, 2, 4, 6, 8}; 
-         int total_elements = compute_total_elements_helper(transposed2->shape, transposed2->dimensions);
+        double expected_data2[] = {1, 3, 5, 7, 2, 4, 6, 8};
+        int total_elements = compute_total_elements_helper(transposed2->shape, transposed2->dimensions);
         for (int i = 0; i < total_elements; i++) {
             if (fabs(transposed2->data[i] - expected_data2[i]) > 1e-9) passed = false;
         }
@@ -251,7 +259,7 @@ void test_transpose() {
     free_tensor(transposed2);
 
     // Test Case 3: Transpose with invalid axes (should return NULL)
-    int invalid_axes[] = {0, 2}; 
+    int invalid_axes[] = {0, 2};
     Tensor *t3 = create_tensor(data1, shape1, 2);
     Tensor *transposed3 = transpose_tensor(t3, invalid_axes);
     if (transposed3 != NULL) {
@@ -267,7 +275,7 @@ void test_transpose() {
 
 // Test function for add_tensors
 void test_add() {
-     const char *test_name = "test_add";
+    const char *test_name = "test_add";
     bool passed = true;
 
     // Test Case 1: Element-wise addition (same shape)
@@ -294,7 +302,7 @@ void test_add() {
     int shape2_1[] = {2, 2};
     Tensor *t2_1 = create_tensor(data2_1, shape2_1, 2);
     double data2_2[] = {10.0};
-    int shape2_2[] = {1}; 
+    int shape2_2[] = {1};
     Tensor *t2_2 = create_tensor(data2_2, shape2_2, 1);
     Tensor *result2 = add_tensors(t2_1, t2_2);
 
@@ -314,7 +322,7 @@ void test_add() {
     int shape3_1[] = {2, 2};
     Tensor *t3_1 = create_tensor(data3_1, shape3_1, 2);
     double data3_2[] = {10.0, 20.0};
-    int shape3_2[] = {1, 2}; 
+    int shape3_2[] = {1, 2};
     Tensor *t3_2 = create_tensor(data3_2, shape3_2, 2);
     Tensor *result3 = add_tensors(t3_1, t3_2);
 
@@ -334,7 +342,7 @@ void test_add() {
     int shape4_1[] = {2, 2};
     Tensor *t4_1 = create_tensor(data4_1, shape4_1, 2);
     double data4_2[] = {10.0, 20.0};
-    int shape4_2[] = {2, 1}; 
+    int shape4_2[] = {2, 1};
     Tensor *t4_2 = create_tensor(data4_2, shape4_2, 2);
     Tensor *result4 = add_tensors(t4_1, t4_2);
 
@@ -371,7 +379,7 @@ void test_add() {
 
 // Test function for subtract_tensors
 void test_subtract() {
-     const char *test_name = "test_subtract";
+    const char *test_name = "test_subtract";
     bool passed = true;
 
     // Test Case 1: Element-wise subtraction (same shape)
@@ -418,7 +426,7 @@ void test_subtract() {
     int shape3_1[] = {2, 2};
     Tensor *t3_1 = create_tensor(data3_1, shape3_1, 2);
     double data3_2[] = {1.0, 2.0};
-    int shape3_2[] = {1, 2}; 
+    int shape3_2[] = {1, 2};
     Tensor *t3_2 = create_tensor(data3_2, shape3_2, 2);
     Tensor *result3 = subtract_tensors(t3_1, t3_2);
 
@@ -438,7 +446,7 @@ void test_subtract() {
     int shape4_1[] = {2, 2};
     Tensor *t4_1 = create_tensor(data4_1, shape4_1, 2);
     double data4_2[] = {1.0, 2.0};
-    int shape4_2[] = {2, 1}; 
+    int shape4_2[] = {2, 1};
     Tensor *t4_2 = create_tensor(data4_2, shape4_2, 2);
     Tensor *result4 = subtract_tensors(t4_1, t4_2);
 
@@ -459,7 +467,7 @@ void test_subtract() {
 
 // Test function for multiply_tensors
 void test_multiply() {
-     const char *test_name = "test_multiply";
+    const char *test_name = "test_multiply";
     bool passed = true;
 
     // Test Case 1: Element-wise multiplication (same shape)
@@ -486,7 +494,7 @@ void test_multiply() {
     int shape2_1[] = {2, 2};
     Tensor *t2_1 = create_tensor(data2_1, shape2_1, 2);
     double data2_2[] = {10.0};
-    int shape2_2[] = {1}; 
+    int shape2_2[] = {1};
     Tensor *t2_2 = create_tensor(data2_2, shape2_2, 1);
     Tensor *result2 = multiply_tensors(t2_1, t2_2);
 
@@ -526,7 +534,7 @@ void test_multiply() {
     int shape4_1[] = {2, 2};
     Tensor *t4_1 = create_tensor(data4_1, shape4_1, 2);
     double data4_2[] = {10.0, 20.0};
-    int shape4_2[] = {2, 1}; 
+    int shape4_2[] = {2, 1};
     Tensor *t4_2 = create_tensor(data4_2, shape4_2, 2);
     Tensor *result4 = multiply_tensors(t4_1, t4_2);
 
@@ -555,10 +563,10 @@ void test_dot_product() {
     double data1_1[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     int shape1_1[] = {2, 3};
     Tensor *t1_1 = create_tensor(data1_1, shape1_1, 2);
-    double data1_2[] = {7.0, 8.0, 9.0, 10.0, 11.0, 12.0}; 
+    double data1_2[] = {7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
     int shape1_2[] = {3, 2};
     Tensor *t1_2 = create_tensor(data1_2, shape1_2, 2);
-    Tensor *result1 = dot_product(t1_1, t1_2); 
+    Tensor *result1 = dot_product_tensor(t1_1, t1_2);
 
     // Expected result:
     // [[1*7 + 2*9 + 3*11, 1*8 + 2*10 + 3*12],
@@ -580,13 +588,13 @@ void test_dot_product() {
     free_tensor(expected1);
 
     // Test Case 2: Vector dot product (1x3 * 3x1)
-    double data2_1[] = {1.0, 2.0, 3.0}; 
+    double data2_1[] = {1.0, 2.0, 3.0};
     int shape2_1[] = {1, 3};
     Tensor *t2_1 = create_tensor(data2_1, shape2_1, 2);
-    double data2_2[] = {4.0, 5.0, 6.0}; 
+    double data2_2[] = {4.0, 5.0, 6.0};
     int shape2_2[] = {3, 1};
     Tensor *t2_2 = create_tensor(data2_2, shape2_2, 2);
-    Tensor *result2 = dot_product(t2_1, t2_2); 
+    Tensor *result2 = dot_product_tensor(t2_1, t2_2);
 
     // Expected result: [[1*4 + 2*5 + 3*6]] = [[4 + 10 + 18]] = [[32]]
     double expected_data2[] = {32.0};
@@ -600,14 +608,14 @@ void test_dot_product() {
     free_tensor(result2);
     free_tensor(expected2);
 
-     // Test Case 3: Matrix-vector multiplication (2x3 * 3)
+    // Test Case 3: Matrix-vector multiplication (2x3 * 3)
     double data3_1[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}; // Shape {2, 3}
     int shape3_1[] = {2, 3};
     Tensor *t3_1 = create_tensor(data3_1, shape3_1, 2);
     double data3_2_adj[] = {7.0, 8.0, 9.0}; // Data for {3, 1}
     int shape3_2_adj[] = {3, 1};
     Tensor *t3_2_adj = create_tensor(data3_2_adj, shape3_2_adj, 2); // Shape {3, 1}
-    Tensor *result3 = dot_product(t3_1, t3_2_adj); // Expected shape {2, 1}
+    Tensor *result3 = dot_product_tensor(t3_1, t3_2_adj); // Expected shape {2, 1}
 
     // Expected result:
     // [[1*7 + 2*8 + 3*9],
@@ -629,14 +637,14 @@ void test_dot_product() {
 
 
     // Test Case 4: Non-aligned shapes (should return NULL)
-    double data4_1_bad[] = {1,2,3,4,5,6}; 
-    int shape4_1_bad[] = {2,3};
+    double data4_1_bad[] = {1, 2, 3, 4, 5, 6};
+    int shape4_1_bad[] = {2, 3};
     Tensor *t4_1_bad = create_tensor(data4_1_bad, shape4_1_bad, 2);
-    double data4_2_bad[] = {1,2,3,4,5,6,7,8}; 
-    int shape4_2_bad[] = {4,2};
+    double data4_2_bad[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int shape4_2_bad[] = {4, 2};
     Tensor *t4_2_bad = create_tensor(data4_2_bad, shape4_2_bad, 2);
-    
-    Tensor *result4 = dot_product(t4_1_bad, t4_2_bad);
+
+    Tensor *result4 = dot_product_tensor(t4_1_bad, t4_2_bad);
     if (result4 != NULL) {
         passed = false;
         free_tensor(result4);
@@ -661,9 +669,9 @@ void test_partial() {
     }; // Shape {3, 3}
     int shape1[] = {3, 3};
     Tensor *t1 = create_tensor(data1, shape1, 2);
-    int start_indices1[] = {1, 1}; 
-    int end_indices1[] = {3, 3};   
-    Tensor *partial1 = partial_tensor(t1, start_indices1, end_indices1); 
+    int start_indices1[] = {1, 1};
+    int end_indices1[] = {3, 3};
+    Tensor *partial1 = partial_tensor(t1, start_indices1, end_indices1);
 
     double expected_data1[] = {5.0, 6.0, 8.0, 9.0};
     int expected_shape1[] = {2, 2};
@@ -676,12 +684,12 @@ void test_partial() {
     free_tensor(expected1);
 
     // Test Case 2: Extract a row vector from a matrix
-    double data2[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}; 
+    double data2[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     int shape2[] = {2, 3};
     Tensor *t2 = create_tensor(data2, shape2, 2);
-    int start_indices2[] = {0, 0}; 
-    int end_indices2[] = {1, 3};   
-    Tensor *partial2 = partial_tensor(t2, start_indices2, end_indices2); 
+    int start_indices2[] = {0, 0};
+    int end_indices2[] = {1, 3};
+    Tensor *partial2 = partial_tensor(t2, start_indices2, end_indices2);
 
     double expected_data2[] = {1.0, 2.0, 3.0};
     int expected_shape2[] = {1, 3};
@@ -693,13 +701,13 @@ void test_partial() {
     free_tensor(partial2);
     free_tensor(expected2);
 
-     // Test Case 3: Extract a single element (scalar)
+    // Test Case 3: Extract a single element (scalar)
     double data3[] = {1.0, 2.0, 3.0, 4.0}; // Shape {2, 2}
     int shape3[] = {2, 2};
     Tensor *t3 = create_tensor(data3, shape3, 2);
-    int start_indices3[] = {1, 0}; 
-    int end_indices3[] = {2, 1};   
-    Tensor *partial3 = partial_tensor(t3, start_indices3, end_indices3); 
+    int start_indices3[] = {1, 0};
+    int end_indices3[] = {2, 1};
+    Tensor *partial3 = partial_tensor(t3, start_indices3, end_indices3);
 
     double expected_data3[] = {3.0};
     int expected_shape3[] = {1, 1};
@@ -716,7 +724,7 @@ void test_partial() {
     int shape4[] = {2};
     Tensor *t4 = create_tensor(data4, shape4, 1);
     int start_indices4[] = {1};
-    int end_indices4[] = {0}; 
+    int end_indices4[] = {0};
     Tensor *partial4 = partial_tensor(t4, start_indices4, end_indices4);
     if (partial4 != NULL) {
         passed = false;
@@ -724,7 +732,7 @@ void test_partial() {
     }
     free_tensor(t4);
 
-     // Test Case 5: Indices out of bounds (should return NULL)
+    // Test Case 5: Indices out of bounds (should return NULL)
     double data5[] = {1.0, 2.0};
     int shape5[] = {2};
     Tensor *t5 = create_tensor(data5, shape5, 1);

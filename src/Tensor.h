@@ -1,11 +1,6 @@
 #ifndef MATH_TENSOR_H
 #define MATH_TENSOR_H
 
-#include <stddef.h> // For size_t
-#include <stdbool.h> // For bool type
-#include <stdio.h> // For NULL
-#include "../../DataStructure-C/src/Memory/Memory.h" // Include your custom memory management header
-
 // Define the Tensor structure
 typedef struct {
     double *data;       // Flattened data array
@@ -131,7 +126,7 @@ Tensor *multiply_tensors(const Tensor *tensor1, const Tensor *tensor2);
  * @param tensor2 Pointer to the second tensor.
  * @return New tensor with the result. Returns NULL on failure or if shapes are not aligned.
  */
-Tensor *dot_product(const Tensor *tensor1, const Tensor *tensor2);
+Tensor *dot_product_tensor(const Tensor *tensor1, const Tensor *tensor2);
 
 /**
  * Extracts a sub-tensor from the given start indices to the end indices (exclusive).

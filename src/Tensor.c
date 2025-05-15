@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 
 
 // Helper function to compute the total number of elements in a tensor
@@ -702,7 +701,7 @@ Tensor *multiply_tensors(const Tensor *tensor1, const Tensor *tensor2) {
 
 // Function to compute the dot product of two tensors
 // Returns a new tensor with the result, or NULL on failure.
-Tensor *dot_product(const Tensor *tensor1, const Tensor *tensor2) {
+Tensor *dot_product_tensor(const Tensor *tensor1, const Tensor *tensor2) {
     if (!tensor1 || !tensor2) {
         fprintf(stderr, "Error: Input tensor is NULL for dot product.\n");
         return NULL;
