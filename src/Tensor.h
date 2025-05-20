@@ -1,10 +1,10 @@
 #ifndef MATH_TENSOR_H
 #define MATH_TENSOR_H
 
-#include <stddef.h> // For size_t
-#include <stdbool.h> // For bool type
-#include <stdio.h> // For NULL
-#include "../../DataStructure-C/src/Memory/Memory.h" // Include your custom memory management header
+#include <stddef.h> 
+#include <stdbool.h>
+#include <stdio.h> 
+#include "../../DataStructure-C/src/Memory/Memory.h"
 
 // Define the Tensor structure
 typedef struct {

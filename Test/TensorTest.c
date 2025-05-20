@@ -1,14 +1,12 @@
 #include <stdio.h>
-#include <stdlib.h> // Re-added for exit, EXIT_FAILURE
+#include <stdlib.h> 
 #include <assert.h>
 #include <math.h>
 #include <string.h> 
 #include <stdbool.h> 
-#include "../src/Tensor.h" // Changed from .c to .h
-#include "Memory/Memory.h" // Added for custom memory management and memory_check
+#include "../src/Tensor.h" 
+#include "Memory/Memory.h" 
 
-// Helper function to compute the total number of elements in a tensor
-// Replicating from tensor.c as it's likely static there.
 int compute_total_elements_helper(const int *shape, int dimensions) {
     int total_elements = 1;
     for (int i = 0; i < dimensions; i++) {
@@ -190,8 +188,8 @@ void test_reshape() {
         passed = false;
     } else {
         // Check specific values in the new shape
-        int indices1[] = {0, 0};  // Should be data[0] = 1.0
-        int indices2[] = {2, 1};  // Should be data[5] = 6.0
+        int indices1[] = {0, 0}; 
+        int indices2[] = {2, 1}; 
         if (fabs(get_tensor_value(reshaped2, indices1) - 1.0) > 1e-10 ||
             fabs(get_tensor_value(reshaped2, indices2) - 6.0) > 1e-10) {
             passed = false;
@@ -202,7 +200,7 @@ void test_reshape() {
     // Test invalid reshape (different number of elements)
     int new_shape3[] = {5};
     Tensor_ptr reshaped3 = reshape_tensor(t, new_shape3, 1);
-    if (reshaped3 != NULL) { // Should be NULL as 5 != 6 elements
+    if (reshaped3 != NULL) { 
         passed = false;
         free_tensor(reshaped3);
     }
@@ -210,7 +208,7 @@ void test_reshape() {
     // Test NULL tensor
     int new_shape4[] = {6};
     Tensor_ptr reshaped4 = reshape_tensor(NULL, new_shape4, 1);
-    if (reshaped4 != NULL) { // Should be NULL as tensor is NULL
+    if (reshaped4 != NULL) {
         passed = false;
         free_tensor(reshaped4);
     }
@@ -232,9 +230,7 @@ void test_transpose() {
     if (!transposed1 || transposed1->dimensions != 2 || transposed1->shape[0] != 3 || transposed1->shape[1] != 2) {
         passed = false;
     } else {
-        // Check specific values in the transposed tensor
-        // Original matrix: [[1, 2, 3], [4, 5, 6]]
-        // Transposed: [[1, 4], [2, 5], [3, 6]]
+        
         int indices1[] = {0, 0}; // Should be data1[0] = 1.0
         int indices2[] = {0, 1}; // Should be data1[3] = 4.0
         if (fabs(get_tensor_value(transposed1, indices1) - 1.0) > 1e-10 ||
@@ -245,7 +241,6 @@ void test_transpose() {
     free_tensor(transposed1);
     free_tensor(t1);
 
-    // Test Case 2: 3D Tensor with custom axes permutation
     double data2[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0};
     int shape2[] = {2, 2, 2}; // (depth, row, col)
     Tensor_ptr t2 = create_tensor(data2, shape2, 3);
@@ -294,8 +289,8 @@ void test_add() {
         passed = false;
     } else {
         // Check result values
-        int indices1[] = {0, 0};  // 1.0 + 5.0 = 6.0
-        int indices2[] = {1, 1};  // 4.0 + 8.0 = 12.0
+        int indices1[] = {0, 0};  
+        int indices2[] = {1, 1}; 
         if (fabs(get_tensor_value(result1, indices1) - 6.0) > 1e-10 ||
             fabs(get_tensor_value(result1, indices2) - 12.0) > 1e-10) {
             passed = false;
@@ -318,8 +313,8 @@ void test_add() {
         passed = false;
     } else {
         // Check result values: scalar broadcasts
-        int indices1[] = {0, 0};  // 1.0 + 5.0 = 6.0
-        int indices2[] = {1, 1};  // 1.0 + 8.0 = 9.0
+        int indices1[] = {0, 0}; 
+        int indices2[] = {1, 1}; 
         if (fabs(get_tensor_value(result2, indices1) - 6.0) > 1e-10 ||
             fabs(get_tensor_value(result2, indices2) - 9.0) > 1e-10) {
             passed = false;
@@ -365,8 +360,8 @@ void test_subtract() {
         passed = false;
     } else {
         // Check result values
-        int indices1[] = {0, 0};  // 5.0 - 1.0 = 4.0
-        int indices2[] = {1, 1};  // 8.0 - 4.0 = 4.0
+        int indices1[] = {0, 0};  
+        int indices2[] = {1, 1};  
         if (fabs(get_tensor_value(result1, indices1) - 4.0) > 1e-10 ||
             fabs(get_tensor_value(result1, indices2) - 4.0) > 1e-10) {
             passed = false;
@@ -399,8 +394,8 @@ void test_multiply() {
         passed = false;
     } else {
         // Check result values (element-wise multiplication)
-        int indices1[] = {0, 0};  // 1.0 * 5.0 = 5.0
-        int indices2[] = {1, 1};  // 4.0 * 8.0 = 32.0
+        int indices1[] = {0, 0};  
+        int indices2[] = {1, 1};  
         if (fabs(get_tensor_value(result1, indices1) - 5.0) > 1e-10 ||
             fabs(get_tensor_value(result1, indices2) - 32.0) > 1e-10) {
             passed = false;
@@ -422,8 +417,8 @@ void test_dot_product() {
     bool passed = true;
 
     // Test Case 1: Matrix multiplication (2x3 . 3x2)
-    double data1_1[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}; // 2x3 matrix
-    double data1_2[] = {7.0, 8.0, 9.0, 10.0, 11.0, 12.0}; // 3x2 matrix
+    double data1_1[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}; 
+    double data1_2[] = {7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
     int shape1_1[] = {2, 3};
     int shape1_2[] = {3, 2};
     Tensor_ptr t1_1 = create_tensor(data1_1, shape1_1, 2);
@@ -433,12 +428,6 @@ void test_dot_product() {
     if (!result1 || result1->dimensions != 2 || result1->shape[0] != 2 || result1->shape[1] != 2) {
         passed = false;
     } else {
-        // Check result values
-        // [1, 2, 3] . [7, 8] = 1*7 + 2*9 + 3*11 = 7 + 18 + 33 = 58
-        //           . [8, 10]   1*8 + 2*10 + 3*12 = 8 + 20 + 36 = 64
-        // [4, 5, 6] . [9, 10] = 4*7 + 5*9 + 6*11 = 28 + 45 + 66 = 139
-        //           . [11,12]   4*8 + 5*10 + 6*12 = 32 + 50 + 72 = 154
-        // Result should be [[58, 64], [139, 154]]
         int indices1[] = {0, 0};
         int indices2[] = {0, 1};
         int indices3[] = {1, 0};

@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include <stdlib.h> // Re-added for exit, EXIT_FAILURE
-#include "Memory/Memory.h" // Added for custom memory management
+#include <stdlib.h> 
+#include "Memory/Memory.h"
 
 
 // Helper function to compute the total number of elements in a tensor
