@@ -13,6 +13,7 @@ typedef struct {
     int *strides;       // Strides for each dimension
     int dimensions;     // Number of dimensions
 } Tensor;
+typedef Tensor *Tensor_ptr;
 
 /**
  * Initializes a tensor with given data and shape.
@@ -22,14 +23,14 @@ typedef struct {
  * @param dimensions Size of the shape array.
  * @return Pointer to the created tensor. Returns NULL on failure.
  */
-Tensor *create_tensor(const double *data, const int *shape, int dimensions);
+Tensor_ptr create_tensor(const double *data, const int *shape, int dimensions);
 
 /**
  * Frees the memory allocated for a tensor.
  *
  * @param tensor Pointer to the tensor to be freed.
  */
-void free_tensor(Tensor *tensor);
+void free_tensor(Tensor_ptr tensor);
 
 /**
  * Retrieves the value at the given indices.
@@ -38,7 +39,7 @@ void free_tensor(Tensor *tensor);
  * @param indices Array of indices specifying the position. Must have tensor->dimensions elements.
  * @return Value at the specified position. Exits on invalid indices.
  */
-double get_tensor_value(const Tensor *tensor, const int *indices);
+double get_tensor_value(const Tensor_ptr tensor, const int *indices);
 
 /**
  * Sets the value at the given indices.
@@ -47,7 +48,7 @@ double get_tensor_value(const Tensor *tensor, const int *indices);
  * @param indices Array of indices specifying the position. Must have tensor->dimensions elements.
  * @param value Value to set at the specified position. Exits on invalid indices.
  */
-void set_tensor_value(Tensor *tensor, const int *indices, double value);
+void set_tensor_value(Tensor_ptr tensor, const int *indices, double value);
 
 /**
  * Reshapes the tensor to the specified new shape.
@@ -58,7 +59,7 @@ void set_tensor_value(Tensor *tensor, const int *indices, double value);
  * @param new_dimensions Size of the new shape array.
  * @return Pointer to the reshaped tensor. Returns NULL on failure or if element count changes.
  */
-Tensor *reshape_tensor(const Tensor *tensor, const int *new_shape, int new_dimensions);
+Tensor_ptr reshape_tensor(const Tensor_ptr tensor, const int *new_shape, int new_dimensions);
 
 /**
  * Transposes the tensor according to the specified axes.
@@ -69,7 +70,7 @@ Tensor *reshape_tensor(const Tensor *tensor, const int *new_shape, int new_dimen
  * If NULL, reverses the axes.
  * @return Pointer to the transposed tensor. Returns NULL on failure or invalid axes.
  */
-Tensor *transpose_tensor(const Tensor *tensor, const int *axes);
+Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes);
 
 /**
  * Computes the broadcasted shape of two tensors.
@@ -91,7 +92,7 @@ int *compute_broadcast_shape(const int *shape1, int dimensions1, const int *shap
  * @param target_shape_size Size of the target shape array.
  * @return New tensor with the target shape. Returns NULL on failure or if broadcasting is not possible.
  */
-Tensor *broadcast_to(const Tensor *tensor, const int *target_shape, int target_shape_size);
+Tensor_ptr broadcast_to(const Tensor_ptr tensor, const int *target_shape, int target_shape_size);
 
 /**
  * Adds two tensors element-wise with broadcasting.
@@ -101,7 +102,7 @@ Tensor *broadcast_to(const Tensor *tensor, const int *target_shape, int target_s
  * @param tensor2 Pointer to the second tensor.
  * @return New tensor with the result. Returns NULL on failure or if shapes are not broadcastable.
  */
-Tensor *add_tensors(const Tensor *tensor1, const Tensor *tensor2);
+Tensor_ptr add_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2);
 
 /**
  * Subtracts one tensor from another element-wise with broadcasting.
@@ -111,7 +112,7 @@ Tensor *add_tensors(const Tensor *tensor1, const Tensor *tensor2);
  * @param tensor2 Pointer to the second tensor.
  * @return New tensor with the result. Returns NULL on failure or if shapes are not broadcastable.
  */
-Tensor *subtract_tensors(const Tensor *tensor1, const Tensor *tensor2);
+Tensor_ptr subtract_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2);
 
 /**
  * Multiplies two tensors element-wise with broadcasting.
@@ -121,7 +122,7 @@ Tensor *subtract_tensors(const Tensor *tensor1, const Tensor *tensor2);
  * @param tensor2 Pointer to the second tensor.
  * @return New tensor with the result. Returns NULL on failure or if shapes are not broadcastable.
  */
-Tensor *multiply_tensors(const Tensor *tensor1, const Tensor *tensor2);
+Tensor_ptr multiply_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2);
 
 /**
  * Computes the dot product of two tensors.
@@ -131,7 +132,7 @@ Tensor *multiply_tensors(const Tensor *tensor1, const Tensor *tensor2);
  * @param tensor2 Pointer to the second tensor.
  * @return New tensor with the result. Returns NULL on failure or if shapes are not aligned.
  */
-Tensor *dot_product(const Tensor *tensor1, const Tensor *tensor2);
+Tensor_ptr dot_product(const Tensor_ptr tensor1, const Tensor_ptr tensor2);
 
 /**
  * Extracts a sub-tensor from the given start indices to the end indices (exclusive).
@@ -142,14 +143,14 @@ Tensor *dot_product(const Tensor *tensor1, const Tensor *tensor2);
  * @param end_indices Array specifying the end indices (exclusive) for each dimension. Must have tensor->dimensions elements.
  * @return A new Tensor containing the extracted sub-tensor. Returns NULL on failure or invalid indices.
  */
-Tensor *partial_tensor(const Tensor *tensor, const int *start_indices, const int *end_indices);
+Tensor_ptr partial_tensor(const Tensor_ptr tensor, const int *start_indices, const int *end_indices);
 
 /**
  * Prints the tensor data for debugging purposes.
  *
  * @param tensor Pointer to the tensor.
  */
-void print_tensor(const Tensor *tensor);
+void print_tensor(const Tensor_ptr tensor);
 
 // Helper functions (might be declared here or kept static in the .c file)
 // Declaring them here makes them public, but they are primarily internal helpers.
