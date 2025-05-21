@@ -5,7 +5,6 @@
 #include <stdlib.h> 
 #include "Memory/Memory.h"
 
-
 // Helper function to compute the total number of elements in a tensor
 int compute_total_elements(const int *shape, int dimensions) {
     int total_elements = 1;
@@ -18,7 +17,7 @@ int compute_total_elements(const int *shape, int dimensions) {
 
 // Helper function to compute the strides for each dimension based on the shape.
 int *compute_strides(const int *shape, int dimensions) {
-    int *strides = malloc_(dimensions * sizeof(int), __func__); 
+    int *strides = malloc_(dimensions * sizeof(int), "compute_strides");
     if (!strides) {
         perror("Failed to allocate memory for strides");
         exit(EXIT_FAILURE);
@@ -32,7 +31,7 @@ int *compute_strides(const int *shape, int dimensions) {
 }
 
 // Helper function to validate indices are within the valid range for each dimension.
-void validate_indices(const Tensor_ptr tensor, const int *indices) {
+void validate_indices(const Tensor* tensor, const int *indices) {
     if (!tensor || !indices) {
         fprintf(stderr, "Error: Tensor or indices are NULL.\n");
         exit(EXIT_FAILURE);
@@ -48,7 +47,7 @@ void validate_indices(const Tensor_ptr tensor, const int *indices) {
 
 // Helper function to convert a flat index to multi-dimensional indices based on strides.
 int *unflatten_index(int flat_index, const int *shape, const int *strides, int dimensions) {
-    int *indices = malloc_(dimensions * sizeof(int), __func__); // Use custom malloc_
+    int *indices = malloc_(dimensions * sizeof(int), "unflatten_index"); // Use custom malloc_
     if (!indices) {
         perror("Failed to allocate memory for unflattened indices");
         exit(EXIT_FAILURE);
@@ -90,14 +89,14 @@ Tensor_ptr create_tensor(const double *data, const int *shape, int dimensions) {
     }
 
 
-    Tensor_ptr tensor = malloc_(sizeof(Tensor), __func__); 
+    Tensor_ptr tensor = malloc_(sizeof(Tensor), "create_tensor");
     if (!tensor) {
         perror("Failed to allocate memory for Tensor");
         return NULL;
     }
 
     tensor->dimensions = dimensions;
-    tensor->shape = malloc_(dimensions * sizeof(int), __func__); 
+    tensor->shape = malloc_(dimensions * sizeof(int), "create_tensor");
     if (!tensor->shape) {
         perror("Failed to allocate memory for tensor shape");
         free_(tensor);
@@ -112,7 +111,7 @@ Tensor_ptr create_tensor(const double *data, const int *shape, int dimensions) {
         return NULL;
     }
 
-    tensor->data = malloc_(total_elements * sizeof(double), __func__); 
+    tensor->data = malloc_(total_elements * sizeof(double), "create_tensor");
     if (!tensor->data) {
         perror("Failed to allocate memory for tensor data");
         free_(tensor->strides);
@@ -149,7 +148,7 @@ void free_tensor(Tensor_ptr tensor) {
  * @param indices Array of indices specifying the position.
  * @return Value at the specified position.
  */
-double get_tensor_value(const Tensor_ptr tensor, const int *indices) {
+double get_tensor_value(const Tensor* tensor, const int *indices) {
     validate_indices(tensor, indices); 
 
     int flat_index = 0;
@@ -185,7 +184,7 @@ void set_tensor_value(Tensor_ptr tensor, const int *indices, double value) {
  * @param new_dimensions Size of the new shape array.
  * @return Pointer to the reshaped tensor. Returns NULL on failure.
  */
-Tensor_ptr reshape_tensor(const Tensor_ptr tensor, const int *new_shape, int new_dimensions) {
+Tensor_ptr reshape_tensor(const Tensor* tensor, const int *new_shape, int new_dimensions) {
     if (!tensor || !new_shape || new_dimensions <= 0) {
         fprintf(stderr, "Error: Invalid input for reshape_tensor.\\n");
         return NULL;
@@ -212,7 +211,7 @@ Tensor_ptr reshape_tensor(const Tensor_ptr tensor, const int *new_shape, int new
  * @param axes Array representing the order of axes. If NULL, reverses the axes.
  * @return Pointer to the transposed tensor. Returns NULL on failure.
  */
-Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes) {
+Tensor_ptr transpose_tensor(const Tensor* tensor, const int *axes) {
     if (!tensor) {
         fprintf(stderr, "Error: Input tensor is NULL for transpose.\n");
         return NULL;
@@ -220,7 +219,7 @@ Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes) {
 
     int dimensions = tensor->dimensions;
     int *actual_axes = NULL;
-    int *new_shape = malloc_(dimensions * sizeof(int), __func__); 
+    int *new_shape = malloc_(dimensions * sizeof(int), "transpose_tensor");
     if (!new_shape) {
          perror("Failed to allocate memory for new_shape in transpose");
          return NULL;
@@ -228,7 +227,7 @@ Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes) {
 
     if (axes == NULL) {
         // Reverse axes if not provided
-        actual_axes = malloc_(dimensions * sizeof(int), __func__); 
+        actual_axes = malloc_(dimensions * sizeof(int), "transpose_tensor");
         if (!actual_axes) {
              perror("Failed to allocate memory for actual_axes in transpose");
              free_(new_shape);
@@ -240,7 +239,7 @@ Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes) {
         }
     } else {
         // Use provided axes and validate
-        actual_axes = malloc_(dimensions * sizeof(int), __func__); 
+        actual_axes = malloc_(dimensions * sizeof(int), "transpose_tensor");
          if (!actual_axes) {
              perror("Failed to allocate memory for actual_axes in transpose");
              free_(new_shape);
@@ -249,7 +248,7 @@ Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes) {
         memcpy(actual_axes, axes, dimensions * sizeof(int));
 
         // Basic validation: check if axes are a permutation of 0 to dimensions-1
-        int *check = calloc_(dimensions, sizeof(int), __func__); 
+        int *check = calloc_(dimensions, sizeof(int), "transpose_tensor");
         if (!check) {
              perror("Failed to allocate memory for check in transpose");
              free_(actual_axes);
@@ -271,7 +270,7 @@ Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes) {
     }
 
     int total_elements = compute_total_elements(tensor->shape, dimensions);
-    double *new_data = malloc_(total_elements * sizeof(double), __func__); 
+    double *new_data = malloc_(total_elements * sizeof(double), "transpose_tensor");
      if (!new_data) {
          perror("Failed to allocate memory for new_data in transpose");
          free_(actual_axes);
@@ -289,8 +288,8 @@ Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes) {
 
 
     // Rearrange data
-    int *original_indices = malloc_(dimensions * sizeof(int), __func__); 
-    int *new_indices = malloc_(dimensions * sizeof(int), __func__);
+    int *original_indices = malloc_(dimensions * sizeof(int), "transpose_tensor");
+    int *new_indices = malloc_(dimensions * sizeof(int), "transpose_tensor");
      if (!original_indices || !new_indices) {
          perror("Failed to allocate memory for indices in transpose");
          free_(actual_axes);
@@ -349,7 +348,7 @@ Tensor_ptr transpose_tensor(const Tensor_ptr tensor, const int *axes) {
 // Returns a new array for the broadcast shape, or NULL on failure.
 int *compute_broadcast_shape(const int *shape1, int dimensions1, const int *shape2, int dimensions2) {
     int max_dimensions = dimensions1 > dimensions2 ? dimensions1 : dimensions2;
-    int *broadcast_shape = malloc_(max_dimensions * sizeof(int), __func__); 
+    int *broadcast_shape = malloc_(max_dimensions * sizeof(int), "compute_broadcast_shape");
     if (!broadcast_shape) {
         perror("Failed to allocate memory for broadcast_shape");
         return NULL;
@@ -373,7 +372,7 @@ int *compute_broadcast_shape(const int *shape1, int dimensions1, const int *shap
 
 // Function to broadcast a tensor to a target shape
 // Returns a new broadcasted tensor, or NULL on failure.
-Tensor_ptr broadcast_to(const Tensor_ptr tensor, const int *target_shape, int target_shape_size) {
+Tensor_ptr broadcast_to(const Tensor* tensor, const int *target_shape, int target_shape_size) {
     if (!tensor || !target_shape || target_shape_size <= 0) {
         fprintf(stderr, "Error: Invalid input for broadcast_to.\\n");
         return NULL;
@@ -381,7 +380,7 @@ Tensor_ptr broadcast_to(const Tensor_ptr tensor, const int *target_shape, int ta
 
     
     int expanded_dimensions = target_shape_size;
-    int *expanded_shape = malloc_(expanded_dimensions * sizeof(int), __func__);
+    int *expanded_shape = malloc_(expanded_dimensions * sizeof(int), "broadcast_to");
      if (!expanded_shape) {
          perror("Failed to allocate memory for expanded_shape in broadcast_to");
          return NULL;
@@ -407,14 +406,14 @@ Tensor_ptr broadcast_to(const Tensor_ptr tensor, const int *target_shape, int ta
     }
 
 
-    Tensor_ptr broadcasted_tensor = malloc_(sizeof(Tensor), __func__);
+    Tensor_ptr broadcasted_tensor = malloc_(sizeof(Tensor), "broadcast_to");
     if (!broadcasted_tensor) {
         perror("Failed to allocate memory for broadcasted_tensor");
         return NULL;
     }
 
     broadcasted_tensor->dimensions = target_shape_size;
-    broadcasted_tensor->shape = malloc_(target_shape_size * sizeof(int), __func__); 
+    broadcasted_tensor->shape = malloc_(target_shape_size * sizeof(int), "broadcast_to");
     if (!broadcasted_tensor->shape) {
         perror("Failed to allocate memory for broadcasted_tensor shape");
         free_(broadcasted_tensor);
@@ -430,7 +429,7 @@ Tensor_ptr broadcast_to(const Tensor_ptr tensor, const int *target_shape, int ta
     }
 
     int total_elements = compute_total_elements(target_shape, target_shape_size);
-    broadcasted_tensor->data = malloc_(total_elements * sizeof(double), __func__); 
+    broadcasted_tensor->data = malloc_(total_elements * sizeof(double), "broadcast_to");
      if (!broadcasted_tensor->data) {
         perror("Failed to allocate memory for broadcasted_tensor data");
         free_(broadcasted_tensor->strides);
@@ -441,7 +440,7 @@ Tensor_ptr broadcast_to(const Tensor_ptr tensor, const int *target_shape, int ta
 
 
     // Pre-allocate index array for efficiency
-    int *indices = malloc_(target_shape_size * sizeof(int), __func__);
+    int *indices = malloc_(target_shape_size * sizeof(int), "broadcast_to");
      if (!indices) {
          perror("Failed to allocate memory for indices in broadcast_to");
          free_(broadcasted_tensor->data);
@@ -484,7 +483,7 @@ Tensor_ptr broadcast_to(const Tensor_ptr tensor, const int *target_shape, int ta
 
 // Function to add two tensors
 // Returns a new tensor with the result, or NULL on failure.
-Tensor_ptr add_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
+Tensor_ptr add_tensors(const Tensor* tensor1, const Tensor* tensor2) {
     if (!tensor1 || !tensor2) {
         fprintf(stderr, "Error: Input tensor is NULL for addition.\n");
         return NULL;
@@ -511,7 +510,7 @@ Tensor_ptr add_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
     }
 
 
-    Tensor_ptr result = malloc_(sizeof(Tensor), __func__); 
+    Tensor_ptr result = malloc_(sizeof(Tensor), "add_tensors");
      if (!result) {
         perror("Failed to allocate memory for result tensor in add_tensors");
         free_tensor(broadcasted_tensor1);
@@ -533,7 +532,7 @@ Tensor_ptr add_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
 
 
     int total_elements = compute_total_elements(result->shape, result->dimensions);
-    result->data = malloc_(total_elements * sizeof(double), __func__); 
+    result->data = malloc_(total_elements * sizeof(double), "add_tensors");
      if (!result->data) {
         perror("Failed to allocate memory for result data in add_tensors");
         free_tensor(broadcasted_tensor1);
@@ -557,7 +556,7 @@ Tensor_ptr add_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
 
 // Function to subtract two tensors
 // Returns a new tensor with the result, or NULL on failure.
-Tensor_ptr subtract_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
+Tensor_ptr subtract_tensors(const Tensor* tensor1, const Tensor* tensor2) {
     if (!tensor1 || !tensor2) {
         fprintf(stderr, "Error: Input tensor is NULL for subtraction.\n");
         return NULL;
@@ -584,7 +583,7 @@ Tensor_ptr subtract_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) 
     }
 
 
-    Tensor_ptr result = malloc_(sizeof(Tensor), __func__);
+    Tensor_ptr result = malloc_(sizeof(Tensor), "subtract_tensors");
      if (!result) {
         perror("Failed to allocate memory for result tensor in subtract_tensors");
         free_tensor(broadcasted_tensor1);
@@ -606,7 +605,7 @@ Tensor_ptr subtract_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) 
 
 
     int total_elements = compute_total_elements(result->shape, result->dimensions);
-    result->data = malloc_(total_elements * sizeof(double), __func__);
+    result->data = malloc_(total_elements * sizeof(double), "subtract_tensors");
      if (!result->data) {
         perror("Failed to allocate memory for result data in subtract_tensors");
         free_tensor(broadcasted_tensor1);
@@ -630,7 +629,7 @@ Tensor_ptr subtract_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) 
 
 // Function to multiply two tensors
 // Returns a new tensor with the result, or NULL on failure.
-Tensor_ptr multiply_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
+Tensor_ptr multiply_tensors(const Tensor* tensor1, const Tensor* tensor2) {
     if (!tensor1 || !tensor2) {
         fprintf(stderr, "Error: Input tensor is NULL for multiplication.\n");
         return NULL;
@@ -657,7 +656,7 @@ Tensor_ptr multiply_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) 
     }
 
 
-    Tensor_ptr result = malloc_(sizeof(Tensor), __func__); 
+    Tensor_ptr result = malloc_(sizeof(Tensor), "multiply_tensors");
      if (!result) {
         perror("Failed to allocate memory for result tensor in multiply_tensors");
         free_tensor(broadcasted_tensor1);
@@ -679,7 +678,7 @@ Tensor_ptr multiply_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) 
 
 
     int total_elements = compute_total_elements(result->shape, result->dimensions);
-    result->data = malloc_(total_elements * sizeof(double), __func__); 
+    result->data = malloc_(total_elements * sizeof(double), "multiply_tensors");
      if (!result->data) {
         perror("Failed to allocate memory for result data in multiply_tensors");
         free_tensor(broadcasted_tensor1);
@@ -703,7 +702,7 @@ Tensor_ptr multiply_tensors(const Tensor_ptr tensor1, const Tensor_ptr tensor2) 
 
 // Function to compute the dot product of two tensors
 // Returns a new tensor with the result, or NULL on failure.
-Tensor_ptr dot_product(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
+Tensor_ptr dot_product_tensor(const Tensor* tensor1, const Tensor* tensor2) {
     if (!tensor1 || !tensor2) {
         fprintf(stderr, "Error: Input tensor is NULL for dot product.\n");
         return NULL;
@@ -724,9 +723,9 @@ Tensor_ptr dot_product(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
     int result_dimensions = (tensor1->dimensions - 1) + (tensor2->dimensions - 1); // Result dimensions
     if (result_dimensions == 0) result_dimensions = 1; // Handle scalar result case
 
-    int *result_shape = malloc_(result_dimensions * sizeof(int), __func__);
+    int *result_shape = malloc_(result_dimensions * sizeof(int), "dot_product_tensor");
     if (!result_shape) {
-        perror("Failed to allocate memory for result_shape in dot_product");
+        perror("Failed to allocate memory for result_shape in dot_product_tensor");
         return NULL;
     }
 
@@ -741,9 +740,9 @@ Tensor_ptr dot_product(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
     }
 
 
-    Tensor_ptr result = malloc_(sizeof(Tensor), __func__); 
+    Tensor_ptr result = malloc_(sizeof(Tensor), "dot_product_tensor");
      if (!result) {
-        perror("Failed to allocate memory for result tensor in dot_product");
+        perror("Failed to allocate memory for result tensor in dot_product_tensor");
         free_(result_shape);
         return NULL;
     }
@@ -759,9 +758,9 @@ Tensor_ptr dot_product(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
 
 
     int total_elements = compute_total_elements(result->shape, result->dimensions);
-    result->data = malloc_(total_elements * sizeof(double), __func__); 
+    result->data = malloc_(total_elements * sizeof(double), "dot_product_tensor");
      if (!result->data) {
-        perror("Failed to allocate memory for result data in dot_product");
+        perror("Failed to allocate memory for result data in dot_product_tensor");
         free_(result->strides);
         free_(result->shape);
         free_(result);
@@ -770,11 +769,11 @@ Tensor_ptr dot_product(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
 
 
     // Pre-allocate index arrays for efficiency
-    int *result_indices = malloc_(result_dimensions * sizeof(int), __func__);
-    int *tensor1_indices = malloc_(tensor1->dimensions * sizeof(int), __func__);
-    int *tensor2_indices = malloc_(tensor2->dimensions * sizeof(int), __func__);
+    int *result_indices = malloc_(result_dimensions * sizeof(int), "dot_product_tensor");
+    int *tensor1_indices = malloc_(tensor1->dimensions * sizeof(int), "dot_product_tensor");
+    int *tensor2_indices = malloc_(tensor2->dimensions * sizeof(int), "dot_product_tensor");
      if (!result_indices || !tensor1_indices || !tensor2_indices) {
-         perror("Failed to allocate memory for indices in dot_product");
+         perror("Failed to allocate memory for indices in dot_product_tensor");
          free_(result_indices); 
          free_(tensor1_indices);
          free_(tensor2_indices);
@@ -832,13 +831,13 @@ Tensor_ptr dot_product(const Tensor_ptr tensor1, const Tensor_ptr tensor2) {
 
 // Function to extract a sub-tensor
 // Returns a new tensor containing the extracted sub-tensor, or NULL on failure.
-Tensor_ptr partial_tensor(const Tensor_ptr tensor, const int *start_indices, const int *end_indices) {
+Tensor_ptr partial_tensor(const Tensor* tensor, const int *start_indices, const int *end_indices) {
     if (!tensor || !start_indices || !end_indices) {
         fprintf(stderr, "Error: Input tensor or indices are NULL for partial_tensor.\n");
         return NULL;
     }
 
-    int *new_shape = malloc_(tensor->dimensions * sizeof(int), __func__); 
+    int *new_shape = malloc_(tensor->dimensions * sizeof(int), "partial_tensor");
     if (!new_shape) {
         perror("Failed to allocate memory for new_shape in partial_tensor");
         return NULL;
@@ -856,7 +855,7 @@ Tensor_ptr partial_tensor(const Tensor_ptr tensor, const int *start_indices, con
         new_shape[i] = end_indices[i] - start_indices[i];
     }
 
-    Tensor_ptr result = malloc_(sizeof(Tensor), __func__); 
+    Tensor_ptr result = malloc_(sizeof(Tensor), "partial_tensor");
      if (!result) {
         perror("Failed to allocate memory for result tensor in partial_tensor");
         free_(new_shape);
@@ -874,7 +873,7 @@ Tensor_ptr partial_tensor(const Tensor_ptr tensor, const int *start_indices, con
 
 
     int total_elements = compute_total_elements(result->shape, result->dimensions);
-    result->data = malloc_(total_elements * sizeof(double), __func__);
+    result->data = malloc_(total_elements * sizeof(double), "partial_tensor");
      if (!result->data) {
         perror("Failed to allocate memory for result data in partial_tensor");
         free_(result->strides);
@@ -885,8 +884,8 @@ Tensor_ptr partial_tensor(const Tensor_ptr tensor, const int *start_indices, con
 
 
     // Pre-allocate index arrays for efficiency
-    int *result_indices = malloc_(tensor->dimensions * sizeof(int), __func__);
-    int *original_indices = malloc_(tensor->dimensions * sizeof(int), __func__);
+    int *result_indices = malloc_(tensor->dimensions * sizeof(int), "partial_tensor");
+    int *original_indices = malloc_(tensor->dimensions * sizeof(int), "partial_tensor");
      if (!result_indices || !original_indices) {
          perror("Failed to allocate memory for indices in partial_tensor");
          free_(result_indices); 
@@ -933,7 +932,7 @@ Tensor_ptr partial_tensor(const Tensor_ptr tensor, const int *start_indices, con
  *
  * @param tensor Pointer to the tensor.
  */
-void print_tensor(const Tensor_ptr tensor) {
+void print_tensor(const Tensor* tensor) {
     if (!tensor) {
         printf("Tensor is NULL\n");
         return;
