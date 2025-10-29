@@ -14,7 +14,7 @@
  * @param vector     Array list input.
  */
 Eigenvector_ptr create_eigenvector(double eigenvalue, Array_list_ptr vector) {
-    Eigenvector_ptr result = malloc_(sizeof(Eigenvector), "create_eigenvector");
+    Eigenvector_ptr result = malloc_(sizeof(Eigenvector));
     result->eigenvalue = eigenvalue;
     result->vector = create_vector(vector);
     return result;

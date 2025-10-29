@@ -4,6 +4,8 @@
 #include <math.h>
 #include <stdbool.h>
 #include <Memory/Memory.h>
+
+#include "../../../../.conan2/p/b/data_46e492d0923bc/p/include/Memory/Memory.h"
 #include "../src/Tensor.h"
 
 int compute_total_elements_helper(const int *shape, int dimensions) {
@@ -44,7 +46,7 @@ void print_test_result(const char *test_name, bool passed) {
 
 // Helper function to convert a flat index to multi-dimensional indices based on strides.
 int *unflatten_index_helper(int flat_index, const int *shape, const int *strides, int dimensions) {
-    int *indices = malloc_(dimensions * sizeof(int), "unflatten_index_helper");
+    int *indices = malloc_(dimensions * sizeof(int));
     if (!indices) {
         perror("Failed to allocate memory for unflattened indices in helper");
         exit(EXIT_FAILURE); 
@@ -505,7 +507,7 @@ void test_partial() {
 
 // Main test function
 int main() {
-    start_memory_check(); // Added start_memory_check
+    start_medium_memory_check();
     printf("Starting Tensor C Tests (Custom Memory)...\\n");
     
     test_create_and_free();
@@ -519,6 +521,5 @@ int main() {
     test_partial();
     
     printf("Tensor C Tests (Custom Memory) Finished.\\n");
-    end_memory_check(); // Added memory_check call
-    return 0;
+    end_memory_check();
 }

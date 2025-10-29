@@ -4,6 +4,7 @@
 
 #include "../src/Matrix.h"
 #include <stdio.h>
+#include <Memory/Memory.h>
 
 void testColumnWiseNormalize() {
     Matrix_ptr small = create_matrix(3, 3);
@@ -101,7 +102,9 @@ void testDivideByConstant() {
 }
 
 int main() {
+    start_medium_memory_check();
     testColumnWiseNormalize();
     testMultiplyWithConstant();
     testDivideByConstant();
+    end_memory_check();
 }

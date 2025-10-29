@@ -17,7 +17,7 @@
  * @param col is used to create matrix.
  */
 Matrix_ptr create_matrix(int row, int col) {
-    Matrix_ptr result = malloc_(sizeof(Matrix), "create_matrix");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, row, col);
     return result;
 }
@@ -34,7 +34,7 @@ Matrix_ptr create_matrix(int row, int col) {
  */
 Matrix_ptr create_matrix2(int row, int col, double min, double max, int seed) {
     srandom(seed);
-    Matrix_ptr result = malloc_(sizeof(Matrix), "create_matrix2");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, row, col);
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
@@ -51,7 +51,7 @@ Matrix_ptr create_matrix2(int row, int col, double min, double max, int seed) {
  * @param size is used declaring the size of the array.
  */
 Matrix_ptr create_matrix3(int size) {
-    Matrix_ptr result = malloc_(sizeof(Matrix), "create_matrix3");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, size, size);
     for (int i = 0; i < size; i++) {
         result->values[i][i] = 1;
@@ -60,7 +60,7 @@ Matrix_ptr create_matrix3(int size) {
 }
 
 Matrix_ptr create_matrix4(const Vector* vector1, const Vector* vector2) {
-    Matrix_ptr result = malloc_(sizeof(Matrix), "create_matrix4");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, vector1->size, vector2->size);
     for (int i = 0; i < result->row; i++) {
         for (int j = 0; j < result->col; j++) {
@@ -71,7 +71,7 @@ Matrix_ptr create_matrix4(const Vector* vector1, const Vector* vector2) {
 }
 
 Matrix_ptr clone(const Matrix* matrix) {
-    Matrix_ptr result = malloc_(sizeof(Matrix), "clone");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, matrix->row, matrix->col);
     for (int i = 0; i < matrix->row; i++) {
         for (int j = 0; j < matrix->col; j++) {
@@ -238,7 +238,7 @@ void subtract_matrix(Matrix_ptr matrix1, const Matrix* matrix2) {
  * @return Vector that holds the result.
  */
 Vector_ptr multiply_with_vector_from_left(const Matrix* matrix, const Vector* vector) {
-    double *values = malloc_(matrix->col * sizeof(double), "multiply_with_vector_from_left");
+    double *values = malloc_(matrix->col * sizeof(double));
     for (int i = 0; i < matrix->col; i++) {
         values[i] = 0.0;
         for (int j = 0; j < matrix->row; j++) {
@@ -260,7 +260,7 @@ Vector_ptr multiply_with_vector_from_left(const Matrix* matrix, const Vector* ve
  * @return Vector that holds the result.
  */
 Vector_ptr multiply_with_vector_from_right(const Matrix* matrix, const Vector* vector) {
-    double *values = malloc_(matrix->row * sizeof(double), "multiply_with_vector_from_right");
+    double *values = malloc_(matrix->row * sizeof(double));
     for (int i = 0; i < matrix->row; i++) {
         values[i] = 0;
         for (int j = 0; j < matrix->col; j++) {
@@ -294,7 +294,7 @@ double column_sum(const Matrix* matrix, int columnNo) {
  * @return Vector that holds column sum.
  */
 Vector_ptr sum_of_rows(const Matrix* matrix) {
-    double *values = malloc_(matrix->col * sizeof(double), "sum_of_rows");
+    double *values = malloc_(matrix->col * sizeof(double));
     for (int i = 0; i < matrix->col; i++) {
         values[i] = column_sum(matrix, i);
     }
@@ -329,7 +329,7 @@ double row_sum(const Matrix* matrix, int row) {
  */
 Matrix_ptr multiply_with_matrix(const Matrix* matrix1, const Matrix* matrix2) {
     double sum;
-    Matrix_ptr result = malloc_(sizeof(Matrix), "multiply_with_matrix");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, matrix1->row, matrix2->col);
     for (int i = 0; i < matrix1->row; i++) {
         for (int j = 0; j < matrix2->col; j++) {
@@ -352,7 +352,7 @@ Matrix_ptr multiply_with_matrix(const Matrix* matrix1, const Matrix* matrix2) {
  * @return result Matrix.
  */
 Matrix_ptr element_product_with_matrix(const Matrix* matrix1, const Matrix* matrix2) {
-    Matrix_ptr result = malloc_(sizeof(Matrix), "element_product_with_matrix");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, matrix1->row, matrix1->col);
     for (int i = 0; i < matrix1->row; i++) {
         for (int j = 0; j < matrix2->col; j++) {
@@ -398,7 +398,7 @@ double trace(const Matrix* matrix) {
  * @return Matrix type output.
  */
 Matrix_ptr transpose(const Matrix* matrix) {
-    Matrix_ptr result = malloc_(sizeof(Matrix), "transpose");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, matrix->col, matrix->row);
     for (int i = 0; i < matrix->row; i++) {
         for (int j = 0; j < matrix->col; j++) {
@@ -420,7 +420,7 @@ Matrix_ptr transpose(const Matrix* matrix) {
  * @return result Matrix.
  */
 Matrix_ptr partial(const Matrix* matrix, int rowstart, int rowend, int colstart, int colend) {
-    Matrix_ptr result = malloc_(sizeof(Matrix), "partial");
+    Matrix_ptr result = malloc_(sizeof(Matrix));
     allocate_matrix(result, rowend - rowstart + 1, colend - colstart + 1);
     for (int i = rowstart; i <= rowend; i++)
         for (int j = colstart; j <= colend; j++)
@@ -478,9 +478,9 @@ void inverse(Matrix_ptr matrix) {
     int i, icol, irow, k, l, ll;
     Matrix_ptr b = create_matrix3(matrix->row);
     int *indxc, *indxr, *ipiv;
-    indxc = calloc_(matrix->row, sizeof(int), "inverse_1");
-    indxr = calloc_(matrix->row, sizeof(int), "inverse_2");
-    ipiv = calloc_(matrix->row, sizeof(int), "inverse_3");
+    indxc = calloc_(matrix->row, sizeof(int));
+    indxr = calloc_(matrix->row, sizeof(int));
+    ipiv = calloc_(matrix->row, sizeof(int));
     for (i = 1; i <= matrix->row; i++) {
         big = 0.0;
         irow = -1;
@@ -500,7 +500,7 @@ void inverse(Matrix_ptr matrix) {
         }
         ipiv[icol - 1] = ipiv[icol - 1] + 1;
         if (irow != icol) {
-            double *dummy = malloc_(matrix->col * sizeof(double), "inverse");
+            double *dummy = malloc_(matrix->col * sizeof(double));
             memcpy(dummy, matrix->values[irow - 1], matrix->col * sizeof(double));
             memcpy(matrix->values[irow - 1], matrix->values[icol - 1], matrix->col * sizeof(double));
             memcpy(matrix->values[icol - 1], dummy, matrix->col * sizeof(double));
@@ -597,9 +597,9 @@ Array_list_ptr characteristics(const Matrix* matrix) {
     Matrix_ptr matrix1 = clone(matrix);
     Matrix_ptr v;
     v = create_matrix3(matrix->row);
-    double *d = malloc_(matrix->row * sizeof(double), "characteristics_1");
-    double *b = malloc_(matrix->row * sizeof(double), "characteristics_2");
-    double *z = malloc_(matrix->row * sizeof(double), "characteristics_3");
+    double *d = malloc_(matrix->row * sizeof(double));
+    double *b = malloc_(matrix->row * sizeof(double));
+    double *z = malloc_(matrix->row * sizeof(double));
     double EPS = 0.000000000000000001;
     for (ip = 0; ip < matrix->row; ip++) {
         b[ip] = d[ip] = matrix1->values[ip][ip];

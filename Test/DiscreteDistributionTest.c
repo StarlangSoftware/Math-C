@@ -5,6 +5,7 @@
 #include "../src/DiscreteDistribution.h"
 #include <stdio.h>
 #include <string.h>
+#include <Memory/Memory.h>
 
 void testAddItem() {
     Discrete_distribution_ptr smallDistribution = create_discrete_distribution();
@@ -183,6 +184,7 @@ void testGetProbabilityLaplaceSmoothing() {
 }
 
 int main() {
+    start_medium_memory_check();
     testAddItem();
     testRemoveItem();
     testAddDistribution();
@@ -191,4 +193,5 @@ int main() {
     testGetMaxItem();
     testGetProbability();
     testGetProbabilityLaplaceSmoothing();
+    end_memory_check();
 }

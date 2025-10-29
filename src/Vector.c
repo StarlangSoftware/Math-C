@@ -13,7 +13,7 @@
  * @param values vector input.
  */
 Vector_ptr create_vector(Array_list_ptr values) {
-    Vector_ptr result = malloc_(sizeof(Vector), "create_vector");
+    Vector_ptr result = malloc_(sizeof(Vector));
     result->values = values;
     result->size = values->size;
     return result;
@@ -32,7 +32,7 @@ void free_vector(Vector_ptr vector) {
  * @param x    item to add values vector.
  */
 Vector_ptr create_vector2(int size, double x) {
-    Vector_ptr result = malloc_(sizeof(Vector), "create_vector2");
+    Vector_ptr result = malloc_(sizeof(Vector));
     result->size = size;
     result->values = create_array_list();
     for (int i = 0; i < size; i++) {
@@ -51,7 +51,7 @@ Vector_ptr create_vector2(int size, double x) {
  * @param x     item to add values vector's given index.
  */
 Vector_ptr create_vector3(int size, int index, double x) {
-    Vector_ptr result = malloc_(sizeof(Vector), "create_vector3");
+    Vector_ptr result = malloc_(sizeof(Vector));
     result->size = size;
     result->values = create_array_list();
     for (int i = 0; i < size; i++) {
@@ -72,7 +72,7 @@ Vector_ptr create_vector3(int size, int index, double x) {
  * @param values double array input.
  */
 Vector_ptr create_vector4(double *values, int size) {
-    Vector_ptr result = malloc_(sizeof(Vector), "create_vector4");
+    Vector_ptr result = malloc_(sizeof(Vector));
     result->size = size;
     result->values = create_array_list();
     for (int i = 0; i < size; i++) {
@@ -82,7 +82,7 @@ Vector_ptr create_vector4(double *values, int size) {
 }
 
 Vector_ptr create_vector5(FILE *input_file) {
-    Vector_ptr result = malloc_(sizeof(Vector), "create_vector5");
+    Vector_ptr result = malloc_(sizeof(Vector));
     result->values = create_array_list();
     fscanf(input_file, "%d", &(result->size));
     for (int i = 0; i < result->size; i++){
@@ -100,7 +100,7 @@ Vector_ptr create_vector5(FILE *input_file) {
  * @return result Vector.
  */
 Vector_ptr biased(const Vector* vector) {
-    Vector_ptr result = malloc_(sizeof(Vector), "biased");
+    Vector_ptr result = malloc_(sizeof(Vector));
     result->values = create_array_list();
     array_list_add_double(result->values, 1);
     for (int i = 0; i < vector->size; i++) {
@@ -128,7 +128,7 @@ void add_value_to_vector(Vector_ptr vector, double x) {
  */
 void insert_into_pos(Vector_ptr vector, int pos, double x) {
     double *value;
-    value = malloc_(sizeof(double), "insert_into_pos");
+    value = malloc_(sizeof(double));
     *value = x;
     array_list_insert(vector->values, pos, value);
     vector->size++;
@@ -244,7 +244,7 @@ void relu_derivative_of_vector(Vector_ptr vector) {
  * @return result Vector.
  */
 Vector_ptr skip_vector(const Vector* vector, int mod, int value) {
-    Vector_ptr result = malloc_(sizeof(Vector), "skip_vector");
+    Vector_ptr result = malloc_(sizeof(Vector));
     result->values = create_array_list();
     int i = value;
     while (i < vector->size) {
@@ -291,7 +291,7 @@ void subtract_vector(Vector_ptr vector, const Vector* subtracted) {
  * @return new Vector with result array.
  */
 Vector_ptr vector_difference(const Vector* vector, const Vector* subtracted) {
-    double *values = malloc_(vector->size * sizeof(double), "vector_difference");
+    double *values = malloc_(vector->size * sizeof(double));
     for (int i = 0; i < vector->size; i++) {
         values[i] = array_list_get_double(vector->values, i) -
                     array_list_get_double(subtracted->values, i);
@@ -340,7 +340,7 @@ double dot_product_with_itself(const Vector* vector) {
  * @return Vector with result array.
  */
 Vector_ptr element_product_with_vector(const Vector* vector1, const Vector* vector2) {
-    double *values = malloc_(vector1->size * sizeof(double), "element_product_with_vector");
+    double *values = malloc_(vector1->size * sizeof(double));
     for (int i = 0; i < vector1->size; i++) {
         values[i] = array_list_get_double(vector1->values, i) *
                     array_list_get_double(vector2->values, i);
@@ -382,7 +382,7 @@ void multiply_with_value(Vector_ptr vector, double x) {
  * @return Vector result.
  */
 Vector_ptr product_with_value(const Vector* vector, double x) {
-    Vector_ptr result = malloc_(sizeof(Vector), "product_with_value");
+    Vector_ptr result = malloc_(sizeof(Vector));
     result->values = create_array_list();
     for (int i = 0; i < vector->size; i++) {
         array_list_add_double(result->values, x * array_list_get_double(vector->values, i));

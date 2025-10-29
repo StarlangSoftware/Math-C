@@ -5,6 +5,7 @@
 #include "../src/Vector.h"
 #include <stdio.h>
 #include <math.h>
+#include <Memory/Memory.h>
 
 void testBiased() {
     double data1[] = {2, 3, 4, 5, 6};
@@ -215,6 +216,7 @@ void testL2Norm() {
 }
 
 int main() {
+    start_memory_check();
     testBiased();
     testElementAdd();
     testInsert();
@@ -231,4 +233,5 @@ int main() {
     testMultiply();
     testL1Normalize();
     testL2Norm();
+    end_memory_check();
 }

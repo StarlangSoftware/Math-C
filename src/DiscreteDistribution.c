@@ -12,7 +12,7 @@
  * A constructor of DiscreteDistribution class which calls its super class.
  */
 Discrete_distribution_ptr create_discrete_distribution() {
-    Discrete_distribution_ptr result = malloc_(sizeof(Discrete_distribution), "create_discrete_distribution");
+    Discrete_distribution_ptr result = malloc_(sizeof(Discrete_distribution));
     result->map = create_linked_hash_map((unsigned int (*)(const void *, int)) hash_function_string,
                                          (int (*)(const void *, const void *)) compare_string);
     result->sum = 0;
@@ -23,7 +23,7 @@ Discrete_distribution_ptr create_discrete_distribution2(FILE *input_file) {
     int size;
     char item[MAX_LINE_LENGTH];
     int count;
-    Discrete_distribution_ptr result = malloc_(sizeof(Discrete_distribution), "create_discrete_distribution2_1");
+    Discrete_distribution_ptr result = malloc_(sizeof(Discrete_distribution));
     result->map = create_linked_hash_map((unsigned int (*)(const void *, int)) hash_function_string,
                                          (int (*)(const void *, const void *)) compare_string);
     result->sum = 0;
@@ -31,7 +31,7 @@ Discrete_distribution_ptr create_discrete_distribution2(FILE *input_file) {
     for (int i = 0; i < size; i++){
         fscanf(input_file, "%s%d", item, &count);
         result->sum += count;
-        int *value = malloc_(sizeof(int), "create_discrete_distribution2_2");
+        int *value = malloc_(sizeof(int));
         *value = count;
         linked_hash_map_insert(result->map, item, value);
     }
@@ -55,7 +55,7 @@ void add_item(Discrete_distribution_ptr discrete_distribution, char *item) {
         int *previous_value = linked_hash_map_get(discrete_distribution->map, item);
         (*previous_value)++;
     } else {
-        int *value = malloc_(sizeof(int), "add_item");
+        int *value = malloc_(sizeof(int));
         *value = 1;
         linked_hash_map_insert(discrete_distribution->map, item, value);
     }
@@ -97,7 +97,7 @@ void add_distribution(Discrete_distribution_ptr dst, const Discrete_distribution
             int *previous_value = linked_hash_map_get(dst->map, hash_node->key);
             (*previous_value) += *(int *) hash_node->value;
         } else {
-            int *value = malloc_(sizeof(int), "add_distribution");
+            int *value = malloc_(sizeof(int));
             *value = *(int *) hash_node->value;
             linked_hash_map_insert(dst->map, hash_node->key, value);
         }
@@ -288,7 +288,7 @@ Hash_map_ptr get_probability_distribution(const Discrete_distribution* discrete_
     Node_ptr iterator = discrete_distribution->map->linked_list->head;
     while (iterator != NULL) {
         Hash_node_ptr hash_node = iterator->data;
-        double *probability = malloc_(sizeof(double), "get_probability_distribution");
+        double *probability = malloc_(sizeof(double));
         *probability = get_probability(discrete_distribution, hash_node->key);
         hash_map_insert(result, hash_node->key, probability);
         iterator = iterator->next;
