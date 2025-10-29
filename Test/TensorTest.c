@@ -4,8 +4,6 @@
 #include <math.h>
 #include <stdbool.h>
 #include <Memory/Memory.h>
-
-#include "../../../../.conan2/p/b/data_46e492d0923bc/p/include/Memory/Memory.h"
 #include "../src/Tensor.h"
 
 int compute_total_elements_helper(const int *shape, int dimensions) {
