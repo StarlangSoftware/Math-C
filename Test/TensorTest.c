@@ -387,7 +387,7 @@ void test_multiply() {
     int shape1[] = {2, 2};
     Tensor_ptr t1_1 = create_tensor(data1_1, shape1, 2);
     Tensor_ptr t1_2 = create_tensor(data1_2, shape1, 2);
-    Tensor_ptr result1 = multiply_tensors(t1_1, t1_2);
+    Tensor_ptr result1 = hadamard_product(t1_1, t1_2);
     
     if (!result1 || result1->dimensions != 2 || result1->shape[0] != 2 || result1->shape[1] != 2) {
         passed = false;
@@ -422,7 +422,7 @@ void test_dot_product() {
     int shape1_2[] = {3, 2};
     Tensor_ptr t1_1 = create_tensor(data1_1, shape1_1, 2);
     Tensor_ptr t1_2 = create_tensor(data1_2, shape1_2, 2);
-    Tensor_ptr result1 = dot_product_tensor(t1_1, t1_2);
+    Tensor_ptr result1 = multiply_tensors(t1_1, t1_2);
     
     if (!result1 || result1->dimensions != 2 || result1->shape[0] != 2 || result1->shape[1] != 2) {
         passed = false;
@@ -449,7 +449,7 @@ void test_dot_product() {
     int shape2_2[] = {2, 2};
     Tensor_ptr t2_1 = create_tensor(data2_1, shape2_1, 1);
     Tensor_ptr t2_2 = create_tensor(data2_2, shape2_2, 2);
-    Tensor_ptr result2 = dot_product_tensor(t2_1, t2_2);
+    Tensor_ptr result2 = multiply_tensors(t2_1, t2_2);
     
     if (result2 != NULL) { // Should be NULL as shapes aren't compatible for dot product
         passed = false;

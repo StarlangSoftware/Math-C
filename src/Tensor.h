@@ -7,6 +7,7 @@ typedef struct {
     int *shape;         // Shape of the tensor
     int *strides;       // Strides for each dimension
     int dimensions;     // Number of dimensions
+    int total_elements;
 } Tensor;
 typedef Tensor *Tensor_ptr;
 
@@ -20,12 +21,20 @@ typedef Tensor *Tensor_ptr;
  */
 Tensor_ptr create_tensor(const double *data, const int *shape, int dimensions);
 
+Tensor_ptr create_tensor2(const int *shape, int dimensions);
+
 /**
  * Frees the memory allocated for a tensor.
  *
  * @param tensor Pointer to the tensor to be freed.
  */
 void free_tensor(Tensor_ptr tensor);
+
+Tensor_ptr concat_tensor(const Tensor* tensor1, const Tensor* tensor2, int dimension);
+
+Tensor_ptr tensor_get(const Tensor* tensor, const int* dimensions, int size);
+
+void unflatten_index(int* indices, int flat_index, const int *strides, int dimensions);
 
 /**
  * Retrieves the value at the given indices.
@@ -117,7 +126,7 @@ Tensor_ptr subtract_tensors(const Tensor* tensor1, const Tensor* tensor2);
  * @param tensor2 Pointer to the second tensor.
  * @return New tensor with the result. Returns NULL on failure or if shapes are not broadcastable.
  */
-Tensor_ptr multiply_tensors(const Tensor* tensor1, const Tensor* tensor2);
+Tensor_ptr hadamard_product(const Tensor* tensor1, const Tensor* tensor2);
 
 /**
  * Computes the dot product of two tensors.
@@ -127,7 +136,7 @@ Tensor_ptr multiply_tensors(const Tensor* tensor1, const Tensor* tensor2);
  * @param tensor2 Pointer to the second tensor.
  * @return New tensor with the result. Returns NULL on failure or if shapes are not aligned.
  */
-Tensor_ptr dot_product_tensor(const Tensor* tensor1, const Tensor* tensor2);
+Tensor_ptr multiply_tensors(const Tensor* tensor1, const Tensor* tensor2);
 
 /**
  * Extracts a sub-tensor from the given start indices to the end indices (exclusive).
@@ -146,16 +155,5 @@ Tensor_ptr partial_tensor(const Tensor* tensor, const int *start_indices, const 
  * @param tensor Pointer to the tensor.
  */
 void print_tensor(const Tensor* tensor);
-
-// Helper functions (might be declared here or kept static in the .c file)
-// Declaring them here makes them public, but they are primarily internal helpers.
-// Keeping them static is generally preferred unless they need to be called externally.
-// For this example, we'll keep them static in the .c file as they are implementation details.
-/*
-int compute_total_elements(const int *shape, int dimensions);
-int *compute_strides(const int *shape, int dimensions);
-void validate_indices(const Tensor *tensor, const int *indices);
-int *unflatten_index(int flat_index, const int *shape, const int *strides, int dimensions);
-*/
 
 #endif // MATH_TENSOR_H
