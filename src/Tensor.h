@@ -11,17 +11,11 @@ typedef struct {
 } Tensor;
 typedef Tensor *Tensor_ptr;
 
-/**
- * Initializes a tensor with given data and shape.
- *
- * @param data Flattened array representing the tensor data.
- * @param shape Array representing the shape of the tensor.
- * @param dimensions Size of the shape array.
- * @return Pointer to the created tensor. Returns NULL on failure.
- */
 Tensor_ptr create_tensor(const double *data, const int *shape, int dimensions);
 
 Tensor_ptr create_tensor2(const int *shape, int dimensions);
+
+Tensor_ptr create_tensor3(double *data, const int *shape, int dimensions);
 
 /**
  * Frees the memory allocated for a tensor.

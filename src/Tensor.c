@@ -1,7 +1,6 @@
 #include "Tensor.h"
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 #include <stdlib.h>
 #include "Memory/Memory.h"
 
@@ -103,7 +102,7 @@ Tensor_ptr create_tensor2(const int *shape, int dimensions) {
 }
 
 /**
- * Initializes a tensor with given data and shape.
+ * Initializes a tensor with given data and shape. Data is cloned in the tensor
  *
  * @param data Flattened array representing the tensor data.
  * @param shape Array representing the shape of the tensor.
@@ -122,6 +121,30 @@ Tensor_ptr create_tensor(const double *data, const int *shape, int dimensions) {
     }
     if (tensor->total_elements > 0) {
         memcpy(tensor->data, data, tensor->total_elements * sizeof(double));
+    }
+    return tensor;
+}
+
+/**
+ * Initializes a tensor with given data and shape. Data is used in the tensor
+ *
+ * @param data Flattened array representing the tensor data.
+ * @param shape Array representing the shape of the tensor.
+ * @param dimensions Size of the shape array.
+ * @return Pointer to the created tensor. Returns NULL on failure.
+ */
+Tensor_ptr create_tensor3(double *data, const int *shape, int dimensions) {
+    Tensor_ptr tensor = create_tensor2(shape, dimensions);
+    if (tensor == NULL) return NULL;
+    if (tensor->total_elements == 0 && data != NULL) {
+        fprintf(stderr, "Warning: Shape indicates zero elements, but data is not NULL.\n");
+    }
+    if (tensor->total_elements > 0 && data == NULL) {
+        fprintf(stderr, "Error: Shape indicates elements, but data is NULL.\n");
+        return NULL;
+    }
+    if (tensor->total_elements > 0) {
+        tensor->data = data;
     }
     return tensor;
 }

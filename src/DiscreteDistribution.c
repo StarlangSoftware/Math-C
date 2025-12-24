@@ -168,7 +168,7 @@ char *get_max_item(const Discrete_distribution* discrete_distribution) {
  * and gets the item with maximum value.
  *
  * @param discrete_distribution Current discrete distribution
- * @param includeTheseOnly vector of Strings.
+ * @param include_these_only vector of Strings.
  * @return the item with maximum value.
  */
 char *get_max_item_include_only(const Discrete_distribution* discrete_distribution, const Array_list* include_these_only) {
