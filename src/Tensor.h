@@ -150,4 +150,6 @@ Tensor_ptr partial_tensor(const Tensor* tensor, const int *start_indices, const 
  */
 void print_tensor(const Tensor* tensor);
 
+void update_tensor_data(Tensor_ptr tensor, const double* data);
+
 #endif // MATH_TENSOR_H

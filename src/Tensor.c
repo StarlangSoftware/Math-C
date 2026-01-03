@@ -805,3 +805,9 @@ void print_tensor(const Tensor *tensor) {
     }
     printf("]\n");
 }
+
+void update_tensor_data(Tensor_ptr tensor, const double *data) {
+    for (int i = 0; i < tensor->total_elements; i++) {
+        tensor->data[i] = data[i];
+    }
+}
