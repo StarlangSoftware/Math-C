@@ -811,3 +811,7 @@ void update_tensor_data(Tensor_ptr tensor, const double *data) {
         tensor->data[i] = data[i];
     }
 }
+
+Tensor_ptr clone_tensor(const Tensor *tensor) {
+    return create_tensor(tensor->data, tensor->shape, tensor->dimensions);
+}

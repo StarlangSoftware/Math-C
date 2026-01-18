@@ -152,4 +152,6 @@ void print_tensor(const Tensor* tensor);
 
 void update_tensor_data(Tensor_ptr tensor, const double* data);
 
+Tensor_ptr clone_tensor(const Tensor* tensor);
+
 #endif // MATH_TENSOR_H
