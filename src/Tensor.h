@@ -17,6 +17,8 @@ Tensor_ptr create_tensor2(const int *shape, int dimensions);
 
 Tensor_ptr create_tensor3(double *data, const int *shape, int dimensions);
 
+Tensor_ptr create_tensor4(const int *shape, int dimensions);
+
 /**
  * Frees the memory allocated for a tensor.
  *

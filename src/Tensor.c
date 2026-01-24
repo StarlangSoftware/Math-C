@@ -64,7 +64,7 @@ void unflatten_index(int *indices, int flat_index, const int *strides, int dimen
  * @param dimensions Size of the shape array.
  * @return Pointer to the created tensor. Returns NULL on failure.
  */
-Tensor_ptr create_tensor2(const int *shape, int dimensions) {
+Tensor_ptr create_tensor4(const int *shape, int dimensions) {
     if (!shape || dimensions <= 0) {
         fprintf(stderr, "Error: Invalid shape or dimensions.\\n");
         return NULL;
@@ -90,7 +90,26 @@ Tensor_ptr create_tensor2(const int *shape, int dimensions) {
         free_(tensor);
         return NULL;
     }
-    tensor->data = malloc_(total_elements * sizeof(double));
+    return tensor;
+}
+
+/**
+ * Initializes a tensor with given data and shape.
+ *
+ * @param shape Array representing the shape of the tensor.
+ * @param dimensions Size of the shape array.
+ * @return Pointer to the created tensor. Returns NULL on failure.
+ */
+Tensor_ptr create_tensor2(const int *shape, int dimensions) {
+    Tensor_ptr tensor = create_tensor4(shape, dimensions);
+    if (tensor == NULL) return NULL;
+    if (tensor->total_elements == 0) {
+        free_(tensor->strides);
+        free_(tensor->shape);
+        free_(tensor);
+        return NULL;
+    }
+    tensor->data = malloc_(tensor->total_elements * sizeof(double));
     if (!tensor->data) {
         perror("Failed to allocate memory for tensor data");
         free_(tensor->strides);
@@ -134,7 +153,7 @@ Tensor_ptr create_tensor(const double *data, const int *shape, int dimensions) {
  * @return Pointer to the created tensor. Returns NULL on failure.
  */
 Tensor_ptr create_tensor3(double *data, const int *shape, int dimensions) {
-    Tensor_ptr tensor = create_tensor2(shape, dimensions);
+    Tensor_ptr tensor = create_tensor4(shape, dimensions);
     if (tensor == NULL) return NULL;
     if (tensor->total_elements == 0 && data != NULL) {
         fprintf(stderr, "Warning: Shape indicates zero elements, but data is not NULL.\n");
